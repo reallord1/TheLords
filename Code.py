@@ -9,7 +9,11 @@ screen = py.display.set_mode(win_size)         # Fenstergrösse setzen
 py.display.set_caption("01 Pygames")           # Titel des Fensters
 clock = py.time.Clock()						   # Eine Pygame-Uhr um die Framerate zu kontrollieren
 
- 
+background = py.image.load("Hintergrund.png").convert()
+background = py.transform.scale(background, (800, 600))
+
+screen.blit(background, (0, 0))
+py.display.update()
  
 # Die Klasse des Spielers
 class Player(py.sprite.Sprite):                                          # Wie sieht der Player aus?
@@ -25,14 +29,14 @@ class Player(py.sprite.Sprite):                                          # Wie s
         self.rect.x = random.randint(100,700)                            # zufälliger x-Startpunkt
         self.rect.y = 300
         
-    def move(self):
-        key = py.key.get_pressed()                                     # Alle gedrückten Tasten abrufen
-        if key[py.K_LEFT] == True:                                     
-            self.rect.x = self.rect.x - 3
-        if key[py.K_RIGHT] == True:
-            self.rect.x = self.rect.x + 3
-        if key [py.K_DOWN] == True:
-            self.image =
+   # def move(self):
+        #key = py.key.get_pressed()                                     # Alle gedrückten Tasten abrufen
+       # if key[py.K_LEFT] == True:                                     
+            #self.rect.x = self.rect.x - 3
+        #if key[py.K_RIGHT] == True:
+            #self.rect.x = self.rect.x + 3
+       # if key [py.K_DOWN] == True:
+            #self.image =
             
             
             
@@ -46,3 +50,4 @@ class Player(py.sprite.Sprite):                                          # Wie s
             animation.append(py.transform.scale(img, (xpix, ypix)))
             aufnehmen
         return animation
+    
