@@ -1,4 +1,4 @@
-###Hide and Seek### by Jil
+###Hide and Seek### by Jil und Jimmy
 import pygame as py
 import random
  
