@@ -9,8 +9,19 @@ screen = py.display.set_mode(win_size)         # Fenstergrösse setzen
 py.display.set_caption("01 Pygames")           # Titel des Fensters
 clock = py.time.Clock()						   # Eine Pygame-Uhr um die Framerate zu kontrollieren
 
- 
- 
+
+def load_images(path,names,ending,number,xpix,ypix):
+        file_names = []
+        for i in range(number):
+            file_names.append(path+names+str(i)+ending)
+
+        animation = []
+        for i in range(number):
+            img = py.image.load(file_names[i]).convert()
+            animation.append(py.transform.scale(img, (xpix, ypix)))
+        return animation
+
+
 # Die Klasse des Spielers
 class Player(py.sprite.Sprite):                                          # Wie sieht der Player aus?
     #######################################
@@ -36,16 +47,5 @@ class Player(py.sprite.Sprite):                                          # Wie s
                 self.image = py.image.load("pictures/johannes/sit.l.png")
             elif key[py.K_RIGHT] == True:
                 self.image = py.image.load("pictures/johannes/sit.r.png")
-            
-            
-   
-    def load_images(path,names,ending,number,xpix,ypix):
-        file_names = []
-        for i in range(number):
-            file_names.append(path+names+str(i)+ending)
-            animation = []
-        for i in range(number):
-            img = py.image.load(file_names[i]).convert()
-            animation.append(py.transform.scale(img, (xpix, ypix)))
-            aufnehmen
-        return animation
+
+    
