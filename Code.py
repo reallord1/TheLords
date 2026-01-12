@@ -18,9 +18,9 @@ class Player(py.sprite.Sprite):                                          # Wie s
     #######################################
     def __init__(self):                                            # Hier ist der Bauplan des Players
         super().__init__()                                               # Musst du nicht verstehen
-        self.image = py.image.load("res/images/santa/santa0.gif").convert()    # Bild laden
+        self.image = py.image.load("pictures/johannes/jump.f.l.png").convert()    # Bild laden
         self.image  = py.transform.scale(self.image, (100, 100))         # Bild skalieren
-        self.images = load_images("res/images/santa/","santa",".gif",40,100,100)
+        self.images = load_images("pictures/johannes/","run",".png",40,100,100)
         self.rect   = self.image.get_rect()                              # Umrechteck bestimmen
         self.rect.x = random.randint(100,700)                            # zufälliger x-Startpunkt
         self.rect.y = 300
@@ -32,10 +32,13 @@ class Player(py.sprite.Sprite):                                          # Wie s
         if key[py.K_RIGHT] == True:
             self.rect.x = self.rect.x + 3
         if key [py.K_DOWN] == True:
-            self.image =
+            if key[py.K_LEFT] == True:
+                self.image = py.image.load("pictures/johannes/sit.l.png")
+            elif key[py.K_RIGHT] == True:
+                self.image = py.image.load("pictures/johannes/sit.r.png")
             
             
-            
+   
     def load_images(path,names,ending,number,xpix,ypix):
         file_names = []
         for i in range(number):
