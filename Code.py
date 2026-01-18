@@ -9,8 +9,13 @@ screen = py.display.set_mode(win_size)         # Fenstergrösse setzen
 py.display.set_caption("01 Pygames")           # Titel des Fensters
 clock = py.time.Clock()						   # Eine Pygame-Uhr um die Framerate zu kontrollieren
 
+<<<<<<< HEAD
 #
 <<<<<<< HEAD
+=======
+##
+
+>>>>>>> b0b38c50939705566c94886fee2b85f0444519fe
 background = py.image.load("Hintergrund.png").convert()
 background = py.transform.scale(background, (800, 600))
 
