@@ -10,13 +10,15 @@ py.display.set_caption("01 Pygames")           # Titel des Fensters
 clock = py.time.Clock()						   # Eine Pygame-Uhr um die Framerate zu kontrollieren
 
 #
-
+<<<<<<< HEAD
 background = py.image.load("Hintergrund.png").convert()
 background = py.transform.scale(background, (800, 600))
 
 screen.blit(background, (0, 0))
 py.display.update()
  
+=======
+
 def load_images(path,names,ending,number,xpix,ypix):
         file_names = []
         for i in range(number):
@@ -28,6 +30,8 @@ def load_images(path,names,ending,number,xpix,ypix):
             animation.append(py.transform.scale(img, (xpix, ypix)))
         return animation
 
+
+>>>>>>> 7c2eececf99d94b9dd29b4ebbbe2a81c78461902
 # Die Klasse des Spielers
 class Player(py.sprite.Sprite):                                          # Wie sieht der Player aus?
     #######################################
@@ -42,7 +46,7 @@ class Player(py.sprite.Sprite):                                          # Wie s
         self.rect.x = random.randint(100,700)                            # zufälliger x-Startpunkt
         self.rect.y = 300
         
-
+<<<<<<< HEAD
    # def move(self):
         #key = py.key.get_pressed()                                     # Alle gedrückten Tasten abrufen
        # if key[py.K_LEFT] == True:                                     
@@ -64,7 +68,7 @@ class Player(py.sprite.Sprite):                                          # Wie s
             animation.append(py.transform.scale(img, (xpix, ypix)))
             aufnehmen
         return animation
-    
+=======
     def move(self):
         key = py.key.get_pressed()                                     # Alle gedrückten Tasten abrufen
         if key[py.K_LEFT] == True:                                     
@@ -77,5 +81,5 @@ class Player(py.sprite.Sprite):                                          # Wie s
             elif key[py.K_RIGHT] == True:
                 self.image = py.image.load("pictures/johannes/sit.r.png")
 
-
+>>>>>>> 7c2eececf99d94b9dd29b4ebbbe2a81c78461902
     
