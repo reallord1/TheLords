@@ -14,74 +14,61 @@ clock = py.time.Clock()						   # Eine Pygame-Uhr um die Framerate zu kontrollie
 
 
 background = py.image.load("Hintergrund.png").convert()
-background = py.transform.scale(background, (800, 600))
-
-screen.blit(background, (0, 0))
-py.display.update()
- 
-
-
-def load_images(path,names,ending,number,xpix,ypix):
-        file_names = []
-        for i in range(number):
-            file_names.append(path+names+str(i)+ending)
-
-        animation = []
-        for i in range(number):
-            img = py.image.load(file_names[i]).convert()
-            animation.append(py.transform.scale(img, (xpix, ypix)))
-        return animation
-
+background = py.transform.scale(background, (800, 800))
 
 
 # Die Klasse des Spielers
-class Player(py.sprite.Sprite):                                          # Wie sieht der Player aus?
+class Player():                                          # Wie sieht der Player aus?
     #######################################
     # Bauplan des Spielers
     #######################################
-    def __init__(self):                                            # Hier ist der Bauplan des Players
-        super().__init__()                                               # Musst du nicht verstehen
-        self.image = py.image.load("pictures/johannes/jump.f.l.png").convert()    # Bild laden
-        self.image  = py.transform.scale(self.image, (100, 100))         # Bild skalieren
-        self.images = load_images("pictures/johannes/","run",".png",40,100,100)
-        self.rect   = self.image.get_rect()                              # Umrechteck bestimmen
-        self.rect.x = random.randint(100,700)                            # zufälliger x-Startpunkt
-        self.rect.y = 300
-        
-
-   # def move(self):
-        #key = py.key.get_pressed()                                     # Alle gedrückten Tasten abrufen
-       # if key[py.K_LEFT] == True:                                     
-            #self.rect.x = self.rect.x - 3
-        #if key[py.K_RIGHT] == True:
-            #self.rect.x = self.rect.x + 3
-       # if key [py.K_DOWN] == True:
-            #self.image =
+    def __init__(self):
+        self.breite = 100
+        self.höhe = 100
+        self.x = random.randint(0,700)
+        self.y = random.randint(0,700)
             
-            
-            
-    def load_images(path,names,ending,number,xpix,ypix):
-        file_names = []
-        for i in range(number):
-            file_names.append(path+names+str(i)+ending)
-            animation = []
-        for i in range(number):
-            img = py.image.load(file_names[i]).convert()
-            animation.append(py.transform.scale(img, (xpix, ypix)))
-            aufnehmen
-        return animation
-
     def move(self):
         key = py.key.get_pressed()                                     # Alle gedrückten Tasten abrufen
         if key[py.K_LEFT] == True:                                     
-            self.rect.x = self.rect.x - 3
+            self.x = self.x - 3
         if key[py.K_RIGHT] == True:
-            self.rect.x = self.rect.x + 3
+            self.x = self.x + 3
         if key [py.K_DOWN] == True:
-            if key[py.K_LEFT] == True:
-                self.image = py.image.load("pictures/johannes/sit.l.png")
-            elif key[py.K_RIGHT] == True:
-                self.image = py.image.load("pictures/johannes/sit.r.png")
+            self.y = self.y + 3
+        if key [py.K_UP] == True:
+            self.y = self.y - 3
+            
+    def draw(self):
+        #py.draw.rect(screen,[100,100,100],(self.x,self.y,self.breite,self.höhe),0)
+        player = py.image.load("Hintergrund.png").convert()
+        player = py.transform.scale(background, (self.breite, self.höhe))
+        screen.blit(player,(self.x,self.y))
+            
+                
+player = Player()
+
+while True:
+    
+    screen.blit(background, (0, 0))
+    
+    
+    player.move()
+    player.draw()
+    
+    events = py.event.get()
+    for event in events:
+        if event.type == py.QUIT:
+            py.quit()
+    
+    py.display.update()
+    clock.tick(32)
+            
+            
+                
+  
+
+
 
 
     
