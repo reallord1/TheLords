@@ -13,7 +13,7 @@ clock = py.time.Clock()						   # Eine Pygame-Uhr um die Framerate zu kontrollie
 #
 
 
-background = py.image.load("Hintergrund.png").convert()
+background = py.image.load("pictures/background", "Hintergrund.png").convert()
 background = py.transform.scale(background, (800, 800))
 
 
@@ -41,7 +41,7 @@ class Player():                                          # Wie sieht der Player 
             
     def draw(self):
         #py.draw.rect(screen,[100,100,100],(self.x,self.y,self.breite,self.höhe),0)
-        player = py.image.load("Hintergrund.png").convert()
+        player = py.image.load("pictures/johannes/Jump.f.l.png").convert()
         player = py.transform.scale(player, (self.breite, self.höhe))
         screen.blit(player,(self.x,self.y))
 
