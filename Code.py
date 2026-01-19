@@ -10,7 +10,7 @@ py.display.set_caption("01 Pygames")           # Titel des Fensters
 clock = py.time.Clock()						   # Eine Pygame-Uhr um die Framerate zu kontrollieren
 
 
-##
+#
 
 
 background = py.image.load("Hintergrund.png").convert()
@@ -31,22 +31,39 @@ class Player():                                          # Wie sieht der Player 
     def move(self):
         key = py.key.get_pressed()                                     # Alle gedrückten Tasten abrufen
         if key[py.K_LEFT] == True:                                     
-            self.x = self.x - 3
+            self.x = self.x - 5
         if key[py.K_RIGHT] == True:
-            self.x = self.x + 3
+            self.x = self.x + 5
         if key [py.K_DOWN] == True:
-            self.y = self.y + 3
+            self.y = self.y + 5
         if key [py.K_UP] == True:
-            self.y = self.y - 3
+            self.y = self.y - 5
             
     def draw(self):
         #py.draw.rect(screen,[100,100,100],(self.x,self.y,self.breite,self.höhe),0)
         player = py.image.load("Hintergrund.png").convert()
-        player = py.transform.scale(background, (self.breite, self.höhe))
+        player = py.transform.scale(player, (self.breite, self.höhe))
         screen.blit(player,(self.x,self.y))
-            
+
+class Hindernis:
+    def __init__(self, bild_pfad):
+        self.breite = random.randint(100, 300)
+        self.höhe = random.randint(100, 300)
+        self.x = random.randint(0, 800 - self.breite)
+        self.y = 350
+
+        self.image = py.image.load(bild_pfad).convert_alpha()
+        self.image = py.transform.scale(self.image, (self.breite, self.höhe))
+
+    def draw(self):
+        screen.blit(self.image, (self.x, self.y))
                 
 player = Player()
+
+hindernisse1 = hindernisse("Klorolle.png")
+hindernisse2 = hindernisse("Laptop.png")
+hindernisse3 = hindernisse("Test.png")
+hindernisse4 = hindernisse("Uhr.png")
 
 while True:
     
@@ -55,6 +72,11 @@ while True:
     
     player.move()
     player.draw()
+    
+    hindernisse1.draw()
+    hindernisse2.draw()
+    hindernisse3.draw()
+    hindernisse4.draw()
     
     events = py.event.get()
     for event in events:
