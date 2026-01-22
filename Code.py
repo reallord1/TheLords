@@ -125,7 +125,7 @@ class Hindernis:
 player = Player()
 
 hindernisse1 = Hindernis("Klorolle.png")
-hindernisse2 = Hindernis("Laptop.png")
+hindernisse2 = Hindernis("ipad.jpg")
 hindernisse3 = Hindernis("Test.png")
 hindernisse4 = Hindernis("Uhr.png")
 
