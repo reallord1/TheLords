@@ -15,6 +15,7 @@ clock = py.time.Clock()						   # Eine Pygame-Uhr um die Framerate zu kontrollie
 
 background = py.image.load("pictures/background", "Hintergrund.png").convert()
 background = py.transform.scale(background, (800, 800))
+# Quelle Chat-gpt
 
 
 # Die Klasse des Spielers
