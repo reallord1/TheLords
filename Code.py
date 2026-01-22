@@ -128,6 +128,7 @@ hindernisse1 = Hindernis("Klorolle.png")
 hindernisse2 = Hindernis("ipad.jpg")
 hindernisse3 = Hindernis("Test.png")
 hindernisse4 = Hindernis("Uhr.png")
+hindernisse5 = Hindernis("Laptop.png")
 
 # Game Loop
 running = True
@@ -147,6 +148,7 @@ while running:
     hindernisse2.draw()
     hindernisse3.draw()
     hindernisse4.draw()
+    hindernisse5.draw()
 
     py.display.update()
 
