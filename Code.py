@@ -13,7 +13,7 @@ clock = py.time.Clock()						   # Eine Pygame-Uhr um die Framerate zu kontrollie
 #
 
 
-background = py.image.load("pictures/background", "Hintergrund.png").convert()
+background = py.image.load( r"C:\Users\jilc\OneDrive - EDU ZG\Dokumente\GitHub\TheLords\Hintergrund.png").convert()
 background = py.transform.scale(background, (800, 800))
 # Quelle Chat-gpt
 
@@ -61,10 +61,10 @@ class Hindernis:
                 
 player = Player()
 
-hindernisse1 = hindernisse("Klorolle.png")
-hindernisse2 = hindernisse("Laptop.png")
-hindernisse3 = hindernisse("Test.png")
-hindernisse4 = hindernisse("Uhr.png")
+hindernisse1 = Hindernis("Klorolle.png")
+hindernisse2 = Hindernis("Laptop.png")
+hindernisse3 = Hindernis("Test.png")
+hindernisse4 = Hindernis("Uhr.png")
 
 while True:
     
