@@ -3,15 +3,15 @@ import pygame as py
 import random
  
 #Sounds prov.
-background_sound = pygame.mixer.Sound("Name der Musik")
-background_sound.set_volume(0.5)
-background_sound.play(-1) # -1 unendlich wiederholen
+#background_sound = py.mixer.Sound("Name der Musik")
+#background_sound.set_volume(0.5)
+#background_sound.play(-1) # -1 unendlich wiederholen
 
-ducken_sound = pygame.mixer.Sound("Name der Ducken Musik")
-ducken_sound.set_volume(0.5)
+#ducken_sound = py.mixer.Sound("Name der Ducken Musik")
+#ducken_sound.set_volume(0.5)
 
-jump_sound = pygame.mixer.Sound("Name der jump Musik")
-jump_sound.set_volume(0.5)
+#jump_sound = py.mixer.Sound("Name der jump Musik")
+#jump_sound.set_volume(0.5)
 
 
 
@@ -49,10 +49,10 @@ class Player():                                          # Wie sieht der Player 
             self.x = self.x + 5 
         if key [py.K_UP] == True:
             self.y = self.y - 5
-            jump_sound.play
-        if key [py.K_DOWN] == True:
+            #jump_sound.play
+        #if key [py.K_DOWN] == True:
             #change picture to Ducken bis key down = not true
-            ducken_sound.play
+            #ducken_sound.play
             
     def draw(self):
         #py.draw.rect(screen,[100,100,100],(self.x,self.y,self.breite,self.höhe),0)
