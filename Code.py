@@ -9,7 +9,7 @@ screen = py.display.set_mode(win_size)         # Fenstergrösse setzen
 py.display.set_caption("01 Pygames")           # Titel des Fensters
 clock = py.time.Clock()						   # Eine Pygame-Uhr um die Framerate zu kontrollieren
 
-
+1
 #
 
 
