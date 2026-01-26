@@ -55,7 +55,7 @@ for i in range(len(WalkRight)):
     WalkRight[i] = py.transform.scale(WalkRight[i], (spieler_breite, spieler_hoehe))
     WalkLeft[i] = py.transform.scale(WalkLeft[i], (spieler_breite, spieler_hoehe))
 
-# Spielerklasse
+# Spieler
 class Player:
     def __init__(self):
         self.breite = spieler_breite
@@ -112,7 +112,7 @@ class Player:
         else:
             screen.blit(standing, (self.x, self.y))
 
-# Hindernisklasse
+# Hindernisse
 class Hindernis:
     def __init__(self, bild_pfad):
         self.breite = random.randint(100, 300)
@@ -135,7 +135,7 @@ hindernisse3 = Hindernis("Test.png")
 hindernisse4 = Hindernis("Uhr.png")
 hindernisse5 = Hindernis("Laptop.png")
 
-# Game Loop
+
 running = True
 while running:
     clock.tick(FPS)
