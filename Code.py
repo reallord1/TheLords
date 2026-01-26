@@ -1,4 +1,4 @@
-### Hide and Seek – kombiniert ###
+### Hide and Seek ### Jil, Jimmy
 import pygame as py
 import random
 
@@ -14,19 +14,6 @@ FPS = 60
 # Hintergrund
 background = py.image.load("Hintergrund.png").convert()
 background = py.transform.scale(background, (800, 800))
-
-
-#Sounds prov.
-#background_sound = py.mixer.Sound("Name der Musik")
-#background_sound.set_volume(0.5)
-#background_sound.play(-1) # -1 unendlich wiederholen
-
-#ducken_sound = py.mixer.Sound("Name der Ducken Musik")
-#ducken_sound.set_volume(0.5)
-
-#jump_sound = py.mixer.Sound("Name der jump Musik")
-#jump_sound.set_volume(0.5)
-
 
 # Spieler grösse
 spieler_breite = 120
@@ -56,10 +43,13 @@ WalkLeft = [
 ]
 
 standing = py.image.load("pictures/johannes/stand.l.png")
+standing = py.transform.scale(standing, (spieler_breite, spieler_hoehe))
 
+sit_right = py.image.load("pictures/johannes/sit.r.png")
+sit_left  = py.image.load("pictures/johannes/sit.l.png")
 
-standing = py.transform.scale(standing, (spieler_breite, spieler_hoehe))                   #ChatGPT -> die Figut hat sonst beim laufen immer die grösse wider auf die kleine zurükgestellt
-
+sit_right = py.transform.scale(sit_right, (spieler_breite, spieler_hoehe))
+sit_left  = py.transform.scale(sit_left, (spieler_breite, spieler_hoehe))
 
 for i in range(len(WalkRight)):
     WalkRight[i] = py.transform.scale(WalkRight[i], (spieler_breite, spieler_hoehe))
@@ -78,23 +68,38 @@ class Player:
         self.right = False
         self.walkCount = 0
 
+        self.ducken = False
+        self.last_direction = "right"
+
     def move(self):
         keys = py.key.get_pressed()
+        self.ducken = keys[py.K_DOWN]
 
         if keys[py.K_LEFT]:
             self.x -= self.velocity
             self.left = True
             self.right = False
+            self.last_direction = "left"
+
         elif keys[py.K_RIGHT]:
             self.x += self.velocity
             self.right = True
             self.left = False
+            self.last_direction = "right"
+
         else:
             self.left = False
             self.right = False
             self.walkCount = 0
 
     def draw(self):
+        if self.ducken:
+            if self.last_direction == "right":
+                screen.blit(sit_right, (self.x, self.y))
+            else:
+                screen.blit(sit_left, (self.x, self.y))
+            return
+
         if self.walkCount + 1 >= 24:
             self.walkCount = 0
 
