@@ -73,15 +73,19 @@ class Player:
 
     def move(self):
         keys = py.key.get_pressed()
-        self.ducken = keys[py.K_DOWN]
+        moving_left  = keys[py.K_LEFT]
+        moving_right = keys[py.K_RIGHT]
+        
+        
+        self.ducken = keys[py.K_DOWN] and not (moving_left or moving_right)
 
-        if keys[py.K_LEFT]:
+        if moving_left:
             self.x -= self.velocity
             self.left = True
             self.right = False
             self.last_direction = "left"
 
-        elif keys[py.K_RIGHT]:
+        elif moving_right:
             self.x += self.velocity
             self.right = True
             self.left = False
