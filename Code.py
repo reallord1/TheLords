@@ -4,7 +4,7 @@ import random
 
 py.init()
 
-#Grund Ding
+# Grund Ding
 win_size = (800, 800)
 screen = py.display.set_mode(win_size)
 py.display.set_caption("Hide and Seek")
@@ -42,6 +42,21 @@ WalkLeft = [
     py.image.load("pictures/johannes/run.l.8.png")
 ]
 
+# Sprungbilder
+JumpRight = [
+    py.image.load("pictures/johannes/Jump.r.1.png"),
+    py.image.load("pictures/johannes/Jump.r.2.png"),
+    py.image.load("pictures/johannes/Jump.r.3.png"),
+    py.image.load("pictures/johannes/Jump.r.4.png")
+]
+
+JumpLeft = [
+    py.image.load("pictures/johannes/Jump.l.1.png"),
+    py.image.load("pictures/johannes/Jump.l.2.png"),
+    py.image.load("pictures/johannes/Jump.l.3.png"),
+    py.image.load("pictures/johannes/Jump.l.4.png")
+]
+
 standing = py.image.load("pictures/johannes/stand.l.png")
 standing = py.transform.scale(standing, (spieler_breite, spieler_hoehe))
 
@@ -54,6 +69,10 @@ sit_left  = py.transform.scale(sit_left, (spieler_breite, spieler_hoehe))
 for i in range(len(WalkRight)):
     WalkRight[i] = py.transform.scale(WalkRight[i], (spieler_breite, spieler_hoehe))
     WalkLeft[i] = py.transform.scale(WalkLeft[i], (spieler_breite, spieler_hoehe))
+
+for i in range(len(JumpRight)):
+    JumpRight[i] = py.transform.scale(JumpRight[i], (spieler_breite, spieler_hoehe))
+    JumpLeft[i]  = py.transform.scale(JumpLeft[i], (spieler_breite, spieler_hoehe))
 
 # Spieler
 class Player:
@@ -71,12 +90,19 @@ class Player:
         self.ducken = False
         self.last_direction = "right"
 
+        self.jump = False
+        self.jumpCount = 0
+        self.start_y = self.y
+
     def move(self):
         keys = py.key.get_pressed()
         moving_left  = keys[py.K_LEFT]
         moving_right = keys[py.K_RIGHT]
-        
-        
+
+        if keys[py.K_UP] and not self.jump:
+            self.jump = True
+            self.jumpCount = 0
+
         self.ducken = keys[py.K_DOWN] and not (moving_left or moving_right)
 
         if moving_left:
@@ -96,7 +122,23 @@ class Player:
             self.right = False
             self.walkCount = 0
 
+        if self.jump:
+            if self.jumpCount < 15:
+                self.y = self.start_y - (15 - self.jumpCount) * 3
+            else:
+                self.y = self.start_y
+                self.jump = False
+            self.jumpCount += 1
+
     def draw(self):
+        if self.jump:
+            frame = min(self.jumpCount // 4, 3)
+            if self.last_direction == "right":
+                screen.blit(JumpRight[frame], (self.x, self.y))
+            else:
+                screen.blit(JumpLeft[frame], (self.x, self.y))
+            return
+
         if self.ducken:
             if self.last_direction == "right":
                 screen.blit(sit_right, (self.x, self.y))
@@ -138,7 +180,6 @@ hindernisse2 = Hindernis("ipad.png")
 hindernisse3 = Hindernis("Test.png")
 hindernisse4 = Hindernis("Uhr.png")
 hindernisse5 = Hindernis("Laptop.png")
-
 
 running = True
 while running:
