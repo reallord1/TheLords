@@ -126,8 +126,8 @@ class Player:
             self.walkCount = 0
 
         if self.jump:
-            if self.jumpCount < 15:
-                self.y = self.start_y - (15 - self.jumpCount) * 3
+            if self.jumpCount < 25:
+                self.y = self.start_y - (25 - self.jumpCount) * 2.2
             else:
                 self.y = self.start_y
                 self.jump = False
@@ -135,7 +135,7 @@ class Player:
 
     def draw(self):
         if self.jump:
-            frame = min(self.jumpCount // 4, 3)
+            frame = min(self.jumpCount // 6, 3)
             if self.last_direction == "right":
                 screen.blit(JumpRight[frame], (self.x, self.y))
             else:
