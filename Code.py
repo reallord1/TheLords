@@ -15,7 +15,7 @@ FPS = 60
 background = py.image.load("Hintergrund.png").convert()
 background = py.transform.scale(background, (800, 800))
 
-# Spieler grösse (GEÄNDERT)
+# Spieler grösse
 spieler_breite = 90
 spieler_hoehe = 130
 
@@ -66,9 +66,11 @@ stand_right = py.transform.scale(stand_right, (spieler_breite, spieler_hoehe))
 sit_right = py.image.load("pictures/johannes/sit.r.png")
 sit_left  = py.image.load("pictures/johannes/sit.l.png")
 
-# Duck-Bilder kleiner (GEÄNDERT)
-sit_right = py.transform.scale(sit_right, (spieler_breite, 100))
-sit_left  = py.transform.scale(sit_left,  (spieler_breite, 100))
+# Duck-Bilder kleiner
+duck_hoehe = 100
+
+sit_right = py.transform.scale(sit_right, (spieler_breite, duck_hoehe))
+sit_left  = py.transform.scale(sit_left,  (spieler_breite, duck_hoehe))
 
 for i in range(len(WalkRight)):
     WalkRight[i] = py.transform.scale(WalkRight[i], (spieler_breite, spieler_hoehe))
@@ -144,11 +146,10 @@ class Player:
             return
 
         if self.ducken:
-            duck_hoehe = spieler_hoehe - 100
             if self.last_direction == "right":
-                screen.blit(sit_right, (self.x, self.y + duck_hoehe))
+                screen.blit(sit_right, (self.x, self.y + spieler_hoehe - duck_hoehe))
             else:
-                screen.blit(sit_left, (self.x, self.y + duck_hoehe))
+                screen.blit(sit_left, (self.x, self.y + spieler_hoehe - duck_hoehe))
             return
 
         if self.walkCount + 1 >= 24:
