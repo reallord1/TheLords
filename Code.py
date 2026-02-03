@@ -57,8 +57,11 @@ JumpLeft = [
     py.image.load("pictures/johannes/Jump.l.4.png")
 ]
 
-standing = py.image.load("pictures/johannes/stand.l.png")
-standing = py.transform.scale(standing, (spieler_breite, spieler_hoehe))
+stand_left = py.image.load("pictures/johannes/stand.l.png")
+stand_right = py.image.load("pictures/johannes/stand.r.png")
+
+stand_left  = py.transform.scale(stand_left, (spieler_breite, spieler_hoehe))
+stand_right = py.transform.scale(stand_right, (spieler_breite, spieler_hoehe))
 
 sit_right = py.image.load("pictures/johannes/sit.r.png")
 sit_left  = py.image.load("pictures/johannes/sit.l.png")
@@ -152,11 +155,16 @@ class Player:
         if self.left:
             screen.blit(WalkLeft[self.walkCount // 3], (self.x, self.y))
             self.walkCount += 1
+
         elif self.right:
             screen.blit(WalkRight[self.walkCount // 3], (self.x, self.y))
             self.walkCount += 1
+
         else:
-            screen.blit(standing, (self.x, self.y))
+            if self.last_direction == "right":
+                screen.blit(stand_right, (self.x, self.y))
+            else:
+                screen.blit(stand_left, (self.x, self.y))
 
 # Hindernisse
 class Hindernis:
