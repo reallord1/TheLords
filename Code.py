@@ -192,18 +192,10 @@ hindernisse3 = Hindernis("Test.png")
 hindernisse4 = Hindernis("Uhr.png")
 hindernisse5 = Hindernis("Laptop.png")
 
-<<<<<<< HEAD
 
-hindernisse = [
-    Hindernis("Klorolle.png", 120),
-    Hindernis("ipad.png", 180),
-    Hindernis("Uhr.png", 100),
-    Hindernis("Laptop.png", 220),
-    Hindernis("Test.png", 150),
-]
 
-=======
->>>>>>> a511703c8b7e93ff3e883ba4950ed706bfb9601a
+
+
 running = True
 while running:
     clock.tick(FPS)
