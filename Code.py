@@ -140,6 +140,14 @@ hindernisse4 = Hindernis("Uhr.png")
 hindernisse5 = Hindernis("Laptop.png")
 
 
+hindernisse = [
+    Hindernis("Klorolle.png", 120),
+    Hindernis("ipad.png", 180),
+    Hindernis("Uhr.png", 100),
+    Hindernis("Laptop.png", 220),
+    Hindernis("Test.png", 150),
+]
+
 running = True
 while running:
     clock.tick(FPS)
