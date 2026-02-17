@@ -182,7 +182,23 @@ class Hindernis:
 
     def draw(self):
         screen.blit(self.image, (self.x, self.y))
+        
 
+class Stoppuhr:
+    def __init__(self, bild_pfad):
+        self.breite = 100
+        self.höhe = 100
+        self.x = 800 - self.breite  
+        self.y = 0
+        
+        self.image = py.image.load(bild_pfad).convert_alpha()
+        self.image = py.transform.scale(self.image, (self.breite, self.höhe))
+
+
+    def draw(self):
+        screen.blit(self.image, (self.x, self.y))
+        
+        
 # Objekte
 player = Player()
 
@@ -192,7 +208,7 @@ hindernisse3 = Hindernis("Test.png")
 hindernisse4 = Hindernis("Uhr.png")
 hindernisse5 = Hindernis("Laptop.png")
 
-
+stoppuhr = Stoppuhr("Stoppuhr.png")
 
 
 
@@ -215,6 +231,8 @@ while running:
     hindernisse3.draw()
     hindernisse4.draw()
     hindernisse5.draw()
+    
+    stoppuhr.draw()
 
     py.display.update()
 
