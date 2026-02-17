@@ -171,9 +171,9 @@ class Player:
 
 # Hindernisse
 class Hindernis:
-    def __init__(self, bild_pfad):
-        self.breite = random.randint(100, 300)
-        self.höhe = random.randint(100, 300)
+    def __init__(self, bild_pfad, breite, höhe):
+        self.breite = breite
+        self.höhe = höhe
         self.x = random.randint(0, 800 - self.breite)
         self.y = 350
 
@@ -202,11 +202,12 @@ class Stoppuhr:
 # Objekte
 player = Player()
 
-hindernisse1 = Hindernis("Klorolle.png")
-hindernisse2 = Hindernis("ipad.png")
-hindernisse3 = Hindernis("Test.png")
-hindernisse4 = Hindernis("Uhr.png")
-hindernisse5 = Hindernis("Laptop.png")
+hindernisse1 = Hindernis("Klorolle.png", 150, 150)
+hindernisse2 = Hindernis("ipad.png", 150, 150)
+hindernisse3 = Hindernis("Test.png", 150, 150)
+hindernisse4 = Hindernis("Uhr.png", 150,150)
+hindernisse5 = Hindernis("Laptop.png", 150,150)
+
 
 stoppuhr = Stoppuhr("Stoppuhr.png")
 
@@ -223,14 +224,16 @@ while running:
 
     screen.blit(background, (0, 0))
 
-    player.move()
-    player.draw()
-
     hindernisse1.draw()
     hindernisse2.draw()
     hindernisse3.draw()
     hindernisse4.draw()
     hindernisse5.draw()
+
+    player.move()
+    player.draw()
+
+
     
     stoppuhr.draw()
 
