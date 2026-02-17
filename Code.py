@@ -175,7 +175,7 @@ class Hindernis:
         self.breite = breite
         self.höhe = höhe
         self.x = random.randint(0, 800 - self.breite)
-        self.y = 327
+        self.y = 362
 
         self.image = py.image.load(bild_pfad).convert_alpha()
         self.image = py.transform.scale(self.image, (self.breite, self.höhe))
@@ -202,11 +202,11 @@ class Stoppuhr:
 # Objekte
 player = Player()
 
-hindernisse1 = Hindernis("Klorolle.png", 150, 150)
-hindernisse2 = Hindernis("ipad.png", 150, 150)
-hindernisse3 = Hindernis("Test.png", 150, 150)
-hindernisse4 = Hindernis("Uhr.png", 150,150)
-hindernisse5 = Hindernis("Laptop.png", 150,150)
+hindernisse1 = Hindernis("Klorolle.png", 120, 120)
+hindernisse2 = Hindernis("ipad.png", 120, 120)
+hindernisse3 = Hindernis("Test.png", 120, 120)
+hindernisse4 = Hindernis("Uhr.png", 120,120)
+hindernisse5 = Hindernis("Laptop.png", 120,120)
 
 
 stoppuhr = Stoppuhr("Stoppuhr.png")
