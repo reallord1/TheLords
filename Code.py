@@ -169,11 +169,14 @@ class Player:
             else:
                 screen.blit(stand_left, (self.x, self.y))
 
+breite = 150
+hoehe = 150
+
 # Hindernisse
 class Hindernis:
-    def __init__(self, bild_pfad, breite, höhe):
+    def __init__(self, bild_pfad):
         self.breite = breite
-        self.höhe = höhe
+        self.höhe = hoehe
         self.x = random.randint(0, 800 - self.breite)
         self.y = 362
 
@@ -185,7 +188,7 @@ class Hindernis:
         
 
 class Stoppuhr:
-    def __init__(self, bild_pfad):
+    def __init__(self, bild_pfad, breite, hoehe):
         self.breite = 100
         self.höhe = 100
         self.x = 800 - self.breite  
@@ -207,6 +210,42 @@ hindernisse2 = Hindernis("ipad.png", 120, 120)
 hindernisse3 = Hindernis("Test.png", 120, 120)
 hindernisse4 = Hindernis("Uhr.png", 120,120)
 hindernisse5 = Hindernis("Laptop.png", 120,120)
+
+hindernisse1 = Hindernis("Klorolle.png")
+hindernisse2 = Hindernis("ipad.png")
+hindernisse3 = Hindernis("Test.png")
+hindernisse4 = Hindernis("Uhr.png")
+hindernisse5 = Hindernis("Laptop.png")
+
+hindernisse = []
+start_x = 100
+abstand = 180
+bilder = ["Klorolle.png", "ipad.png", "Test.png", "Uhr.png", "Laptop.png"]
+
+
+breite = 150  
+hoehe = 150    
+y_position = 280
+
+# quelle: https://docs.python.org/3/library/functions.html#any
+gebrauchte_positionen = []
+
+for bild in bilder: # ziel--> dass sich die Gegenstände nicht überlappern 
+    while True:
+        x = random.randint(0, 800 - breite)
+        ueberlappen = any(abs(x - pos) < breite + 10 for pos in gebrauchte_positionen)  
+        if not ueberlappen:
+            gebrauchte_positionen.append(x)
+            break
+
+    hindernis = Hindernis(bild, breite, hoehe)
+    hindernis.x = x
+    hindernis.y = y_position
+    hindernisse.append(hindernis) 
+gebrauchte_positionen = []
+
+
+
 
 
 stoppuhr = Stoppuhr("Stoppuhr.png")
