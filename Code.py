@@ -1,4 +1,4 @@
-### Hide and Seek ### Jil, Jimmy
+### Hide and Seek ### Gil, Gimmy und Finnosaurus
 import pygame as py
 import random
 
@@ -175,7 +175,7 @@ class Hindernis:
         self.breite = breite
         self.höhe = höhe
         self.x = random.randint(0, 800 - self.breite)
-        self.y = 350
+        self.y = 327
 
         self.image = py.image.load(bild_pfad).convert_alpha()
         self.image = py.transform.scale(self.image, (self.breite, self.höhe))
