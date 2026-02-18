@@ -176,7 +176,11 @@ hoehe = 150
 
 # Hindernisse
 class Hindernis:
+<<<<<<< Updated upstream
     def __init__(self, bild_pfad, breite, hoehe):
+=======
+    def __init__(self, bild_pfad):
+>>>>>>> Stashed changes
         self.breite = breite
         self.höhe = hoehe
         self.x = random.randint(0, 800 - self.breite)
@@ -207,6 +211,7 @@ class Stoppuhr:
 # Objekte
 player = Player()
 
+<<<<<<< Updated upstream
 
 hindernisse1 = Hindernis("Klorolle.png", 120, 120)
 hindernisse2 = Hindernis("ipad.png", 120, 120)
@@ -214,6 +219,13 @@ hindernisse3 = Hindernis("Test.png", 120, 120)
 hindernisse4 = Hindernis("Uhr.png", 120,120)
 hindernisse5 = Hindernis("Laptop.png", 120,120)
 
+=======
+hindernisse1 = Hindernis("Klorolle.png")
+hindernisse2 = Hindernis("ipad.png")
+hindernisse3 = Hindernis("Test.png")
+hindernisse4 = Hindernis("Uhr.png")
+hindernisse5 = Hindernis("Laptop.png")
+>>>>>>> Stashed changes
 
 hindernisse = []
 start_x = 100
