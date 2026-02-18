@@ -15,7 +15,7 @@ FPS = 60
 background = py.image.load("Hintergrund.png").convert()
 background = py.transform.scale(background, (800, 800))
 
-screen.fill((0, 255, 0))
+
 
 # Spieler grösse
 spieler_breite = 90
@@ -250,6 +250,7 @@ stoppuhr = Stoppuhr("Stoppuhr.png")
 
 
 
+print("Game Loop startet")
 running = True
 while running:
     clock.tick(FPS)
@@ -258,7 +259,8 @@ while running:
         if event.type == py.QUIT:
             running = False
 
-    screen.blit(background, (0, 0))
+    screen.fill((0, 0, 255))  # Blau testen
+    py.display.update()
 
 for hindernis in hindernisse:
     hindernis.draw()
