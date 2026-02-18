@@ -251,27 +251,32 @@ stoppuhr = Stoppuhr("Stoppuhr.png")
 
 
 print("Game Loop startet")
+
+
 running = True
 while running:
     clock.tick(FPS)
 
+    # Event-Handling
     for event in py.event.get():
         if event.type == py.QUIT:
             running = False
 
-    screen.fill((0, 0, 255))  # Blau testen
-    py.display.update()
+    # Hintergrund zeichnen
+    screen.blit(background, (0, 0))
 
-for hindernis in hindernisse:
-    hindernis.draw()
-
+    # Spieler bewegen und zeichnen
     player.move()
     player.draw()
 
+    # Hindernisse zeichnen
+    for hindernis in hindernisse:
+        hindernis.draw()
 
-    
+    # Stoppuhr zeichnen
     stoppuhr.draw()
 
+    # Alles aktualisieren
     py.display.update()
 
 py.quit()
