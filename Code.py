@@ -15,6 +15,8 @@ FPS = 60
 background = py.image.load("Hintergrund.png").convert()
 background = py.transform.scale(background, (800, 800))
 
+screen.fill((0, 255, 0))
+
 # Spieler grösse
 spieler_breite = 90
 spieler_hoehe = 130
@@ -174,7 +176,7 @@ hoehe = 150
 
 # Hindernisse
 class Hindernis:
-    def __init__(self, bild_pfad):
+    def __init__(self, bild_pfad, breite, hoehe):
         self.breite = breite
         self.höhe = hoehe
         self.x = random.randint(0, 800 - self.breite)
@@ -205,17 +207,13 @@ class Stoppuhr:
 # Objekte
 player = Player()
 
+
 hindernisse1 = Hindernis("Klorolle.png", 120, 120)
 hindernisse2 = Hindernis("ipad.png", 120, 120)
 hindernisse3 = Hindernis("Test.png", 120, 120)
 hindernisse4 = Hindernis("Uhr.png", 120,120)
 hindernisse5 = Hindernis("Laptop.png", 120,120)
 
-hindernisse1 = Hindernis("Klorolle.png")
-hindernisse2 = Hindernis("ipad.png")
-hindernisse3 = Hindernis("Test.png")
-hindernisse4 = Hindernis("Uhr.png")
-hindernisse5 = Hindernis("Laptop.png")
 
 hindernisse = []
 start_x = 100
@@ -247,7 +245,6 @@ gebrauchte_positionen = []
 
 
 
-
 stoppuhr = Stoppuhr("Stoppuhr.png")
 
 
@@ -263,11 +260,8 @@ while running:
 
     screen.blit(background, (0, 0))
 
-    hindernisse1.draw()
-    hindernisse2.draw()
-    hindernisse3.draw()
-    hindernisse4.draw()
-    hindernisse5.draw()
+for hindernis in hindernisse:
+    hindernis.draw()
 
     player.move()
     player.draw()
