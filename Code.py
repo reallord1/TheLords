@@ -60,19 +60,14 @@ sit_left  = safe_load("pictures/johannes/sit.l.png", (spieler_breite, duck_hoehe
 # Spieler
 class Player:
     def __init__(self):
-        self.breite = spieler_breite
-        self.höhe = spieler_hoehe
-        self.x = random.randint(0, 700)
-        self.y = 350
-        self.velocity = 3
-
+        self.x = 100
+        self.y = 500 #höhe von player tiefer weil hintergrund neu ist
+        self.velocity = 5
         self.left = False
         self.right = False
         self.walkCount = 0
-
         self.ducken = False
         self.last_direction = "right"
-
         self.jump = False
         self.jumpCount = 0
         self.start_y = self.y
@@ -93,13 +88,11 @@ class Player:
             self.left = True
             self.right = False
             self.last_direction = "left"
-
         elif moving_right:
             self.x += self.velocity
             self.right = True
             self.left = False
             self.last_direction = "right"
-
         else:
             self.left = False
             self.right = False
@@ -124,9 +117,9 @@ class Player:
 
         if self.ducken:
             if self.last_direction == "right":
-                screen.blit(sit_right, (self.x, self.y + spieler_hoehe - duck_hoehe))
+                screen.blit(sit_right, (self.x, self.y + 30))
             else:
-                screen.blit(sit_left, (self.x, self.y + spieler_hoehe - duck_hoehe))
+                screen.blit(sit_left, (self.x, self.y + 30))
             return
 
         if self.walkCount + 1 >= 24:
@@ -135,11 +128,9 @@ class Player:
         if self.left:
             screen.blit(WalkLeft[self.walkCount // 3], (self.x, self.y))
             self.walkCount += 1
-
         elif self.right:
             screen.blit(WalkRight[self.walkCount // 3], (self.x, self.y))
             self.walkCount += 1
-
         else:
             if self.last_direction == "right":
                 screen.blit(stand_right, (self.x, self.y))
