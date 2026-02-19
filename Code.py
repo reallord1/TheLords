@@ -137,40 +137,30 @@ class Player:
             else:
                 screen.blit(stand_left, (self.x, self.y))
 
-breite = 150
-hoehe = 150
 
 # Hindernisse
 class Hindernis:
-
-    def __init__(self, bild_pfad, breite, hoehe):
-
-
-        self.breite = breite
-        self.höhe = hoehe
-        self.x = random.randint(0, 800 - self.breite)
-        self.y = 362
-
-        self.image = py.image.load(bild_pfad).convert_alpha()
-        self.image = py.transform.scale(self.image, (self.breite, self.höhe))
+    def __init__(self, bild_pfad):
+        self.width = 150
+        self.height = 150
+        
+        self.x = random.randint(0, 650)
+        self.y = 510 # tiefe von gegenständen auch angpasst
+        self.image = safe_load(bild_pfad, (self.width, self.height))
 
     def draw(self):
-        screen.blit(self.image, (self.x, self.y))
         
+        screen.blit(self.image, (self.x, self.y))
 
+# Stoppuhr -- musste angepasst werden weil die anzahl "elemente" breite und hoehe etc nicht den anderen einheitlich oben gleich waren --> führte zu immense frustration während vier tagen um herauszufinden was falsch war
 class Stoppuhr:
-    def __init__(self, bild_pfad, breite, hoehe):
-        self.breite = 100
-        self.höhe = 100
-        self.x = 800 - self.breite  
-        self.y = 0
-        
-        self.image = py.image.load(bild_pfad).convert_alpha()
-        self.image = py.transform.scale(self.image, (self.breite, self.höhe))
-
+    def __init__(self):
+        self.image = safe_load("Stoppuhr.png", (100, 100))
 
     def draw(self):
-        screen.blit(self.image, (self.x, self.y))
+        screen.blit(self.image, (700, 0))
+        
+
         
         
 # Objekte
