@@ -1,6 +1,8 @@
 ### Hide and Seek ### Gil, Gimmy und Finnosaurus
 import pygame as py
 import random
+import sys
+from pathlib import Path
 
 py.init()
 
@@ -11,6 +13,7 @@ py.display.set_caption("Hide and Seek")
 clock = py.time.Clock()
 FPS = 60
 
+ 
 # "safe image loader" -> weil wir grosse schwierigkeiten mit unseren Bilddateien hatten --> "CORRUPTED Files" in der Kommandozeile abgegeben und wir hatten nur einen schwarzen Hintergrund
 # https://www.pygame.org/docs/ref/image.html?highlight=image#module-pygame.image --> 
 def safe_load(path, size=None):
@@ -34,15 +37,11 @@ def safe_load(path, size=None):
     
 background = safe_load("Hintergrund.png", (800, 800)) # neu mit safe load :) --> keine corrupted files yuhu
 
-
-# Spieler grösse
+# Grösse vom Spieler
 spieler_breite = 90
 spieler_hoehe = 130
 
-
-# Laufbilder
-# Sprungbilder
-# bewegen vom player ; https://www.geeksforgeeks.org/python/pygame-character-animation/ -> viel prägnanter geschrieben als ne ganze Liste
+# bewegen vom player ; https://www.geeksforgeeks.org/python/pygame-character-animation/
 WalkRight = [safe_load(f"pictures/johannes/run.r.{i}.png", (spieler_breite, spieler_hoehe)) for i in range(1, 9)] # Liste von Bildern wird erstellt --> für jede Zahl ein bild von Johannes gegeben
 WalkLeft  = [safe_load(f"pictures/johannes/run.l.{i}.png", (spieler_breite, spieler_hoehe)) for i in range(1, 9)]
 JumpRight = [safe_load(f"pictures/johannes/Jump.r.{i}.png", (spieler_breite, spieler_hoehe)) for i in range(1, 5)]
@@ -56,8 +55,7 @@ sit_right = safe_load("pictures/johannes/sit.r.png", (spieler_breite, duck_hoehe
 sit_left  = safe_load("pictures/johannes/sit.l.png", (spieler_breite, duck_hoehe))
 
 
-
-# Spieler
+# Player
 class Player:
     def __init__(self):
         self.x = 100
@@ -143,14 +141,13 @@ class Hindernis:
     def __init__(self, bild_pfad):
         self.width = 150
         self.height = 150
-        
         self.x = random.randint(0, 650)
         self.y = 510 # tiefe von gegenständen auch angpasst
         self.image = safe_load(bild_pfad, (self.width, self.height))
 
     def draw(self):
-        
         screen.blit(self.image, (self.x, self.y))
+
 
 # Stoppuhr -- musste angepasst werden weil die anzahl "elemente" breite und hoehe etc nicht den anderen einheitlich oben gleich waren --> führte zu immense frustration während vier tagen um herauszufinden was falsch war
 class Stoppuhr:
@@ -159,80 +156,37 @@ class Stoppuhr:
 
     def draw(self):
         screen.blit(self.image, (700, 0))
-        
 
-        
-        
+
 # Objekte
-player = Player()
+player = Player() # musste ich wie oben ändern --> anzahl elemente stimmten nicht überein --> Grund für Kollaps des Spieles
 
-
-hindernisse1 = Hindernis("Klorolle.png", 120, 120)
-hindernisse2 = Hindernis("ipad.png", 120, 120)
-hindernisse3 = Hindernis("Test.png", 120, 120)
-hindernisse4 = Hindernis("Uhr.png", 120,120)
-hindernisse5 = Hindernis("Laptop.png", 120,120)
-
-
-hindernisse = []
-start_x = 100
-abstand = 180
 bilder = ["Klorolle.png", "ipad.png", "Test.png", "Uhr.png", "Laptop.png"]
+hindernisse = [Hindernis(bild) for bild in bilder]
 
+stoppuhr = Stoppuhr()
 
-breite = 150  
-hoehe = 150    
-y_position = 280
-
-# quelle: https://docs.python.org/3/library/functions.html#any
-gebrauchte_positionen = []
-
-for bild in bilder: # ziel--> dass sich die Gegenstände nicht überlappern 
-    while True:
-        x = random.randint(0, 800 - breite)
-        ueberlappen = any(abs(x - pos) < breite + 10 for pos in gebrauchte_positionen)  
-        if not ueberlappen:
-            gebrauchte_positionen.append(x)
-            break
-
-    hindernis = Hindernis(bild, breite, hoehe)
-    hindernis.x = x
-    hindernis.y = y_position
-    hindernisse.append(hindernis) 
-gebrauchte_positionen = []
-
-
-
-
-stoppuhr = Stoppuhr("Stoppuhr.png")
-
-
-
-
-print("Game Loop startet")
-
-
+# game loop -
 running = True
 while running:
     clock.tick(FPS)
 
-  
     for event in py.event.get():
         if event.type == py.QUIT:
             running = False
 
+    screen.fill((30, 30, 30))
+    
     screen.blit(background, (0, 0))
 
-   
     player.move()
     player.draw()
 
-    for hindernis in hindernisse:
-        hindernis.draw()
+    for h in hindernisse:
+        h.draw()
 
-  
     stoppuhr.draw()
 
-    py.display.update()
+    py.display.flip()
 
 py.quit()
