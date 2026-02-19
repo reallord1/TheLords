@@ -11,10 +11,28 @@ py.display.set_caption("Hide and Seek")
 clock = py.time.Clock()
 FPS = 60
 
-# Hintergrund
-background = py.image.load("Hintergrund.png").convert()
-background = py.transform.scale(background, (800, 800))
+# "safe image loader" -> weil wir grosse schwierigkeiten mit unseren Bilddateien hatten --> "CORRUPTED Files" in der Kommandozeile abgegeben und wir hatten nur einen schwarzen Hintergrund
+# https://www.pygame.org/docs/ref/image.html?highlight=image#module-pygame.image --> 
+def safe_load(path, size=None):
+    try:
+        p = Path(path)
+        if not p.exists():
+            raise FileNotFoundError
 
+        img = py.image.load(str(p)).convert_alpha()
+
+        if size:
+            img = py.transform.scale(img, size)
+
+        return img
+    except:
+        # If image fails, return a visible fallback surface
+        surf = py.Surface(size if size else (100, 100))
+        surf.fill((255, 0, 255))  # bright purple = broken image
+        print(f"[WARNING] Failed loading: {path}")
+        return surf
+    
+background = safe_load("Hintergrund.png", (800, 800)) # neu mit safe load :) --> keine corrupted files yuhu
 
 
 # Spieler grösse
@@ -260,26 +278,23 @@ running = True
 while running:
     clock.tick(FPS)
 
-    # Event-Handling
+  
     for event in py.event.get():
         if event.type == py.QUIT:
             running = False
 
-    # Hintergrund zeichnen
     screen.blit(background, (0, 0))
 
-    # Spieler bewegen und zeichnen
+   
     player.move()
     player.draw()
 
-    # Hindernisse zeichnen
     for hindernis in hindernisse:
         hindernis.draw()
 
-    # Stoppuhr zeichnen
+  
     stoppuhr.draw()
 
-    # Alles aktualisieren
     py.display.update()
 
 py.quit()
