@@ -39,66 +39,23 @@ background = safe_load("Hintergrund.png", (800, 800)) # neu mit safe load :) -->
 spieler_breite = 90
 spieler_hoehe = 130
 
+
 # Laufbilder
-WalkRight = [
-    py.image.load("pictures/johannes/run.r.1.png"),
-    py.image.load("pictures/johannes/run.r.2.png"),
-    py.image.load("pictures/johannes/run.r.3.png"),
-    py.image.load("pictures/johannes/run.r.4.png"),
-    py.image.load("pictures/johannes/run.r.5.png"),
-    py.image.load("pictures/johannes/run.r.6.png"),
-    py.image.load("pictures/johannes/run.r.7.png"),
-    py.image.load("pictures/johannes/run.r.8.png")
-]
-
-WalkLeft = [
-    py.image.load("pictures/johannes/run.l.1.png"),
-    py.image.load("pictures/johannes/run.l.2.png"),
-    py.image.load("pictures/johannes/run.l.3.png"),
-    py.image.load("pictures/johannes/run.l.4.png"),
-    py.image.load("pictures/johannes/run.l.5.png"),
-    py.image.load("pictures/johannes/run.l.6.png"),
-    py.image.load("pictures/johannes/run.l.7.png"),
-    py.image.load("pictures/johannes/run.l.8.png")
-]
-
 # Sprungbilder
-JumpRight = [
-    py.image.load("pictures/johannes/Jump.r.1.png"),
-    py.image.load("pictures/johannes/Jump.r.2.png"),
-    py.image.load("pictures/johannes/Jump.r.3.png"),
-    py.image.load("pictures/johannes/Jump.r.4.png")
-]
+# bewegen vom player ; https://www.geeksforgeeks.org/python/pygame-character-animation/ -> viel prägnanter geschrieben als ne ganze Liste
+WalkRight = [safe_load(f"pictures/johannes/run.r.{i}.png", (spieler_breite, spieler_hoehe)) for i in range(1, 9)] # Liste von Bildern wird erstellt --> für jede Zahl ein bild von Johannes gegeben
+WalkLeft  = [safe_load(f"pictures/johannes/run.l.{i}.png", (spieler_breite, spieler_hoehe)) for i in range(1, 9)]
+JumpRight = [safe_load(f"pictures/johannes/Jump.r.{i}.png", (spieler_breite, spieler_hoehe)) for i in range(1, 5)]
+JumpLeft  = [safe_load(f"pictures/johannes/Jump.l.{i}.png", (spieler_breite, spieler_hoehe)) for i in range(1, 5)]
 
-JumpLeft = [
-    py.image.load("pictures/johannes/Jump.l.1.png"),
-    py.image.load("pictures/johannes/Jump.l.2.png"),
-    py.image.load("pictures/johannes/Jump.l.3.png"),
-    py.image.load("pictures/johannes/Jump.l.4.png")
-]
+stand_right = safe_load("pictures/johannes/stand.r.png", (spieler_breite, spieler_hoehe))
+stand_left  = safe_load("pictures/johannes/stand.l.png", (spieler_breite, spieler_hoehe))
 
-stand_left = py.image.load("pictures/johannes/stand.l.png")
-stand_right = py.image.load("pictures/johannes/stand.r.png")
+duck_hoehe = 100 # er wird kleiner wenn er sich duckt
+sit_right = safe_load("pictures/johannes/sit.r.png", (spieler_breite, duck_hoehe))
+sit_left  = safe_load("pictures/johannes/sit.l.png", (spieler_breite, duck_hoehe))
 
-stand_left  = py.transform.scale(stand_left, (spieler_breite, spieler_hoehe))
-stand_right = py.transform.scale(stand_right, (spieler_breite, spieler_hoehe))
 
-sit_right = py.image.load("pictures/johannes/sit.r.png")
-sit_left  = py.image.load("pictures/johannes/sit.l.png")
-
-# Duck-Bilder kleiner
-duck_hoehe = 100
-
-sit_right = py.transform.scale(sit_right, (spieler_breite, duck_hoehe))
-sit_left  = py.transform.scale(sit_left,  (spieler_breite, duck_hoehe))
-
-for i in range(len(WalkRight)):
-    WalkRight[i] = py.transform.scale(WalkRight[i], (spieler_breite, spieler_hoehe))
-    WalkLeft[i] = py.transform.scale(WalkLeft[i], (spieler_breite, spieler_hoehe))
-
-for i in range(len(JumpRight)):
-    JumpRight[i] = py.transform.scale(JumpRight[i], (spieler_breite, spieler_hoehe))
-    JumpLeft[i]  = py.transform.scale(JumpLeft[i], (spieler_breite, spieler_hoehe))
 
 # Spieler
 class Player:
