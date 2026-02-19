@@ -136,6 +136,43 @@ class Player:
                 screen.blit(stand_left, (self.x, self.y))
 
 
+#Kopf gleiches konzet wie bei class oben player und hindernis
+
+class Kopf:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.width = 300
+        self.height = 300  #grösse vom Kopf
+
+        # Bilder laden
+        self.augen_offen = safe_load("augen_offen.png", (self.width, self.height))
+        self.augen_zu    = safe_load("augen_zu.png", (self.width, self.height))
+
+        self.zeige_offen = True  # bild am Anfang
+
+        # blinzeln jede 4 sek -_> bilder wechseln
+        # https://www.pygame.org/docs/ref/time.html#pygame.time.get_ticks
+        self.last_switch = py.time.get_ticks()
+        self.switch_interval = 4000  # 4 Sek
+
+    def draw(self):
+        current_time = py.time.get_ticks()
+        
+        # schauen ob 4sek vorbei
+        if current_time - self.last_switch >= self.switch_interval:
+            self.zeige_offen = not self.zeige_offen
+            self.last_switch = current_time
+
+        # Bild zeigen
+        if self.zeige_offen:
+            screen.blit(self.augen_offen, (self.x, self.y))
+        else: 
+            screen.blit(self.augen_zu, (self.x, self.y))
+            
+kopf = Kopf(250, 100)
+
+
 # Hindernisse
 class Hindernis:
     def __init__(self, bild_pfad):
@@ -164,7 +201,13 @@ player = Player() # musste ich wie oben ändern --> anzahl elemente stimmten nic
 bilder = ["Klorolle.png", "ipad.png", "Test.png", "Uhr.png", "Laptop.png", "poop.png"]
 hindernisse = [Hindernis(bild) for bild in bilder]
 
+
 stoppuhr = Stoppuhr()
+
+
+
+#Kopfwelches einfügen werden
+
 
 # game loop -
 running = True
@@ -185,7 +228,11 @@ while running:
     for h in hindernisse:
         h.draw()
 
+
+    kopf.draw()
+    
     stoppuhr.draw()
+
     
 
     py.display.flip()
