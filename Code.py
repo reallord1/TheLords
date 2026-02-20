@@ -198,6 +198,8 @@ class Stoppuhr:
 # Objekte
 player = Player() # musste ich wie oben ändern --> anzahl elemente stimmten nicht überein --> Grund für Kollaps des Spieles
 
+#Quelle von Bildern https://www.megavoxels.com/learn/how-to-make-a-pixel-art-watermelon/
+
 bilder = ["sneaker.png", "ipad.png", "chocolate.png", "cake.png", "microwave.png"]
 hindernisse = [Hindernis(bild) for bild in bilder]
 
