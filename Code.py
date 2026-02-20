@@ -189,10 +189,19 @@ class Hindernis:
 # Stoppuhr -- musste angepasst werden weil die anzahl "elemente" breite und hoehe etc nicht den anderen einheitlich oben gleich waren --> führte zu immense frustration während vier tagen um herauszufinden was falsch war
 class Stoppuhr:
     def __init__(self):
-        self.image = safe_load("Stoppuhr.png", (100, 100))
+        self.image = safe_load("Stoppuhr.png", (120, 120))
 
     def draw(self):
-        screen.blit(self.image, (700, 0))
+       
+        sekunden = py.time.get_ticks() // 1000 # definiert die sekunden mit 1000 ms einheit
+        
+        if sekunden % 2 == 0: # jede gerade sekunde wird stoppuhr kleiner 
+            bild = py.transform.scale(self.image, (100, 100))
+        else:
+            # jede ungerade sekunde wird stoppuhr grösser
+            bild = py.transform.scale(self.image, (120, 120))
+
+        screen.blit(bild, (670, 10))
 
 
 # Objekte
