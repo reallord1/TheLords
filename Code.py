@@ -198,7 +198,7 @@ class Stoppuhr:
 # Objekte
 player = Player() # musste ich wie oben ändern --> anzahl elemente stimmten nicht überein --> Grund für Kollaps des Spieles
 
-bilder = ["Klorolle.png", "ipad.png", "Test.png", "Uhr.png", "Laptop.png", "poop.png"]
+bilder = ["sneaker.png", "ipad.png", "chocolate.png", "cake.png", "microwave.png"]
 hindernisse = [Hindernis(bild) for bild in bilder]
 
 
@@ -223,10 +223,12 @@ while running:
     screen.blit(background, (0, 0))
 
     player.move()
-    player.draw()
+   
 
     for h in hindernisse:
         h.draw()
+    
+    player.draw()
 
 
     kopf.draw()
