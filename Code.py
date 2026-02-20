@@ -215,9 +215,7 @@ hindernisse = [
     Hindernis("chocolate.png", 200, 200),
     Hindernis("cake.png", 170, 170),
     Hindernis("microwave.png", 200, 200),
-    Hindernis("Uhr.png", 130, 130),
     Hindernis("sneaker.png", 310, 260),
-    Hindernis("poop.png", 90, 90)
 ]
 
 
