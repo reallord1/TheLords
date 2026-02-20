@@ -142,12 +142,12 @@ class Kopf:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.width = 300
-        self.height = 300  #grösse vom Kopf
+       
+        self.augen_offen = safe_load("augen_offen.png")
+        self.augen_offen = py.transform.scale(self.augen_offen, (300, 500))
 
-        # Bilder laden
-        self.augen_offen = safe_load("augen_offen.png", (self.width, self.height))
-        self.augen_zu    = safe_load("augen_zu.png", (self.width, self.height))
+        self.augen_zu = safe_load("augen_zu.png")
+        self.augen_zu = py.transform.scale(self.augen_zu, (300, 500))
 
         self.zeige_offen = True  # bild am Anfang
 
@@ -170,7 +170,7 @@ class Kopf:
         else: 
             screen.blit(self.augen_zu, (self.x, self.y))
             
-kopf = Kopf(250, 100)
+kopf = Kopf(250, 25)
 
 
 # Hindernisse
