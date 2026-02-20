@@ -175,14 +175,13 @@ kopf = Kopf(250, 25)
 
 # Hindernisse
 class Hindernis:
-    def __init__(self, bild_pfad, width, height):
-        self.width = width
-        
-        self.height = height
+    def __init__(self, bild_pfad, breite, hoehe, y_position):
         self.x = random.randint(0, 650)
-        self.y = 510 # tiefe von Gegenständen angepasst
         
-        self.image = safe_load(bild_pfad, (self.width, self.height))
+        self.y = y_position  # ich kann höhe von gegenständern manuel selber entscheiden              
+        self.image = safe_load(bild_pfad)
+        
+        self.image = py.transform.scale(self.image, (breite, hoehe))
 
     def draw(self):
         screen.blit(self.image, (self.x, self.y))
@@ -212,10 +211,10 @@ player = Player() # musste ich wie oben ändern --> anzahl elemente stimmten nic
 
 # musste wieder angepasst werden also zurück wie am Anfang, weil ich sonst nicht die grössse von jedem Hinderniss seperat ändern könnte
 hindernisse = [
-    Hindernis("chocolate.png", 200, 200),
-    Hindernis("cake.png", 170, 170),
-    Hindernis("microwave.png", 200, 200),
-    Hindernis("sneaker.png", 310, 260),
+    Hindernis("chocolate.png", 200, 200, 455),
+    Hindernis("cake.png", 170, 170, 470),
+    Hindernis("microwave.png", 200, 200, 460),
+    #Hindernis("sneaker.png", 310, 260, 440),
 ]
 
 
