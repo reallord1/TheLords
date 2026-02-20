@@ -154,7 +154,7 @@ class Kopf:
         # blinzeln jede 4 sek -_> bilder wechseln
         # https://www.pygame.org/docs/ref/time.html#pygame.time.get_ticks
         self.last_switch = py.time.get_ticks()
-        self.switch_interval = 4000  # 4 Sek
+        self.switch_interval = 2000 # 2 Sek
 
     def draw(self):
         current_time = py.time.get_ticks()
@@ -175,16 +175,17 @@ kopf = Kopf(250, 100)
 
 # Hindernisse
 class Hindernis:
-    def __init__(self, bild_pfad):
-        self.width = 150
-        self.height = 150
+    def __init__(self, bild_pfad, width, height):
+        self.width = width
+        
+        self.height = height
         self.x = random.randint(0, 650)
-        self.y = 510 # tiefe von gegenständen auch angpasst
+        self.y = 510 # tiefe von Gegenständen angepasst
+        
         self.image = safe_load(bild_pfad, (self.width, self.height))
 
     def draw(self):
         screen.blit(self.image, (self.x, self.y))
-
 
 # Stoppuhr -- musste angepasst werden weil die anzahl "elemente" breite und hoehe etc nicht den anderen einheitlich oben gleich waren --> führte zu immense frustration während vier tagen um herauszufinden was falsch war
 class Stoppuhr:
@@ -209,8 +210,15 @@ player = Player() # musste ich wie oben ändern --> anzahl elemente stimmten nic
 
 #Quelle von Bildern https://www.megavoxels.com/learn/how-to-make-a-pixel-art-watermelon/
 
-bilder = ["sneaker.png", "ipad.png", "chocolate.png", "cake.png", "microwave.png"]
-hindernisse = [Hindernis(bild) for bild in bilder]
+# musste wieder angepasst werden also zurück wie am Anfang, weil ich sonst nicht die grössse von jedem Hinderniss seperat ändern könnte
+hindernisse = [
+    Hindernis("chocolate.png", 200, 200),
+    Hindernis("cake.png", 170, 170),
+    Hindernis("microwave.png", 200, 200),
+    Hindernis("Uhr.png", 130, 130),
+    Hindernis("sneaker.png", 310, 260),
+    Hindernis("poop.png", 90, 90)
+]
 
 
 stoppuhr = Stoppuhr()
