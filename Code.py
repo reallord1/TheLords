@@ -256,3 +256,4 @@ while running:
     py.display.flip()
 
 py.quit()
+
