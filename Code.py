@@ -193,7 +193,7 @@ class Stoppuhr:
 
     def draw(self):
        
-        sekunden = py.time.get_ticks() // 1000 # definiert die sekunden mit 1000 ms einheit
+        sekunden = py.time.get_ticks() // 500 # definiert die sekunden mit 1000 ms einheit
         
         if sekunden % 2 == 0: # jede gerade sekunde wird stoppuhr kleiner 
             bild = py.transform.scale(self.image, (100, 100))
@@ -256,4 +256,3 @@ while running:
     py.display.flip()
 
 py.quit()
-
