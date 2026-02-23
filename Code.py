@@ -176,9 +176,9 @@ kopf = Kopf(250, 25)
 
 # Hindernisse
 class Hindernis:
-    def __init__(self, bild_pfad, breite, hoehe, y_position):
-        self.x = random.randint(0, 650)
-        
+    def __init__(self, bild_pfad, breite, hoehe, x_position, y_position):
+    
+        self.x = x_position # ich kann wie weit rechts oder links die Gegenstände sind selber entscheiden
         self.y = y_position  # ich kann höhe von gegenständern manuel selber entscheiden              
         self.image = safe_load(bild_pfad)
         
@@ -212,9 +212,9 @@ player = Player() # musste ich wie oben ändern --> anzahl elemente stimmten nic
 
 # musste wieder angepasst werden also zurück wie am Anfang, weil ich sonst nicht die grössse von jedem Hinderniss seperat ändern könnte
 hindernisse = [
-    Hindernis("chocolate.png", 200, 200, 456),
-    Hindernis("cake.png", 170, 170, 470),
-    Hindernis("microwave.png", 200, 200, 460),
+    Hindernis("chocolate.png", 200, 200, 390, 457),
+    Hindernis("cake.png", 170, 170, 630, 480),
+    Hindernis("microwave.png", 200, 200, 50, 465),
     ##Hindernis("sneaker.png", 310, 260, 440),
 ]
 
