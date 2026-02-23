@@ -6,6 +6,7 @@ from pathlib import Path
 
 py.init()
 
+
 # Grund Ding
 win_size = (800, 800)
 screen = py.display.set_mode(win_size)
@@ -225,6 +226,8 @@ stoppuhr = Stoppuhr()
 
 #Kopfwelches einfügen werden
 
+startbild = safe_load("Start_Bildschirm.png", (800, 800))
+game_started = False # Starthintergrund
 
 # game loop -
 running = True
@@ -234,13 +237,25 @@ while running:
     for event in py.event.get():
         if event.type == py.QUIT:
             running = False
-
+      
+    # für Hintergrund
+    # https://github.com/search?q=pygame.key.get_pressed+language%3APython&type=Code&l=Python
+    keys = py.key.get_pressed()
+    if keys[py.K_SPACE]:
+        game_started = True # mit boolean deffinieren
+    
     screen.fill((30, 30, 30))
     
     screen.blit(background, (0, 0))
 
     player.move()
    
+    # für Startbild
+    if not game_started:
+        screen.blit(startbild, (0, 0)) # an oberster ecke wird bild reinkopiert
+    else:
+        screen.blit(hintergrundbild , (0, 0))
+
 
     for h in hindernisse:
         h.draw()
