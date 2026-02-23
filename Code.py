@@ -81,12 +81,12 @@ class Player:
 
         self.ducken = keys[py.K_DOWN] and not (moving_left or moving_right)
 
-        if moving_left:
+        if moving_left and self.x > -45:
             self.x -= self.velocity
             self.left = True
             self.right = False
             self.last_direction = "left"
-        elif moving_right:
+        elif moving_right and self.x < 800 -45:
             self.x += self.velocity
             self.right = True
             self.left = False
