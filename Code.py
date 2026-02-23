@@ -41,12 +41,13 @@ background = safe_load("Hintergrund.png", (800, 800)) # neu mit safe load :) -->
 spieler_breite = 90
 spieler_hoehe = 130
 
-# bewegen vom player ; https://www.geeksforgeeks.org/python/pygame-character-animation/
+# bewegen vom player ; https://www.geeksforgeeks.org/python/pygame-character-animation/ -> Dannach noch ausgeschnitten und vormatiert
 WalkRight = [safe_load(f"pictures/johannes/run.r.{i}.png", (spieler_breite, spieler_hoehe)) for i in range(1, 9)] # Liste von Bildern wird erstellt --> für jede Zahl ein bild von Johannes gegeben
 WalkLeft  = [safe_load(f"pictures/johannes/run.l.{i}.png", (spieler_breite, spieler_hoehe)) for i in range(1, 9)]
 JumpRight = [safe_load(f"pictures/johannes/Jump.r.{i}.png", (spieler_breite, spieler_hoehe)) for i in range(1, 5)]
 JumpLeft  = [safe_load(f"pictures/johannes/Jump.l.{i}.png", (spieler_breite, spieler_hoehe)) for i in range(1, 5)]
 
+# stehende Bilder laden
 stand_right = safe_load("pictures/johannes/stand.r.png", (spieler_breite, spieler_hoehe))
 stand_left  = safe_load("pictures/johannes/stand.l.png", (spieler_breite, spieler_hoehe))
 
@@ -61,10 +62,10 @@ class Player:
         self.x = 100
         self.y = 500 #höhe von player tiefer weil hintergrund neu ist
         self.velocity = 5
-        self.left = False
-        self.right = False
+        self.left = False # für das richtige Bild
+        self.right = False # für das richtige Bild
         self.walkCount = 0
-        self.ducken = False
+        self.ducken = False # für das richtige Bild
         self.last_direction = "right"
         self.jump = False
         self.jumpCount = 0
@@ -81,16 +82,16 @@ class Player:
 
         self.ducken = keys[py.K_DOWN] and not (moving_left or moving_right)
 
-        if moving_left and self.x > -45:
+        if moving_left and self.x > -45: # self.x > -45 damit er nicht aus dem Bild geht nur halbt drausen maximal
             self.x -= self.velocity
-            self.left = True
-            self.right = False
-            self.last_direction = "left"
-        elif moving_right and self.x < 800 -45:
+            self.left = True # Bilder
+            self.right = False # Bilder
+            self.last_direction = "left" # für das richtige Bild
+        elif moving_right and self.x < 800 -45: # self.x < 800 -45 damit er nicht aus dem Bild geht nur halbt drausen maximal
             self.x += self.velocity
-            self.right = True
-            self.left = False
-            self.last_direction = "right"
+            self.right = True # Bilder
+            self.left = False # Bilder
+            self.last_direction = "right" # für das richtige Bild
         else:
             self.left = False
             self.right = False
