@@ -6,6 +6,7 @@ from pathlib import Path
 
 py.init()
 
+
 # Grund Ding
 win_size = (800, 800)
 screen = py.display.set_mode(win_size)
@@ -176,9 +177,9 @@ kopf = Kopf(250, 25)
 
 # Hindernisse
 class Hindernis:
-    def __init__(self, bild_pfad, breite, hoehe, y_position):
-        self.x = random.randint(0, 650)
-        
+    def __init__(self, bild_pfad, breite, hoehe, x_position, y_position):
+    
+        self.x = x_position # ich kann wie weit rechts oder links die Gegenstände sind selber entscheiden
         self.y = y_position  # ich kann höhe von gegenständern manuel selber entscheiden              
         self.image = safe_load(bild_pfad)
         
@@ -228,9 +229,9 @@ player = Player() # musste ich wie oben ändern --> anzahl elemente stimmten nic
 
 # musste wieder angepasst werden also zurück wie am Anfang, weil ich sonst nicht die grössse von jedem Hinderniss seperat ändern könnte
 hindernisse = [
-    Hindernis("chocolate.png", 200, 200, 456),
-    Hindernis("cake.png", 170, 170, 470),
-    Hindernis("microwave.png", 200, 200, 460),
+    Hindernis("chocolate.png", 200, 200, 390, 457),
+    Hindernis("cake.png", 170, 170, 630, 480),
+    Hindernis("microwave.png", 200, 200, 50, 465),
     ##Hindernis("sneaker.png", 310, 260, 440),
 ]
 
@@ -242,6 +243,8 @@ stern = Stern(random.randint(0, 650), 350) #####in arbeit
 
 #Kopfwelches einfügen werden
 
+startbild = safe_load("Start_Bildschirm.png", (800, 800))
+game_started = False # Starthintergrund
 
 # game loop -
 running = True
@@ -251,13 +254,25 @@ while running:
     for event in py.event.get():
         if event.type == py.QUIT:
             running = False
-
+      
+    # für Hintergrund
+    # https://github.com/search?q=pygame.key.get_pressed+language%3APython&type=Code&l=Python
+    keys = py.key.get_pressed()
+    if keys[py.K_SPACE]:
+        game_started = True # mit boolean deffinieren
+    
     screen.fill((30, 30, 30))
     
     screen.blit(background, (0, 0))
 
     player.move()
    
+    # für Startbild
+    if not game_started:
+        screen.blit(startbild, (0, 0)) # an oberster ecke wird bild reinkopiert
+    else:
+        screen.blit(hintergrundbild , (0, 0))
+
 
     for h in hindernisse:
         h.draw()
