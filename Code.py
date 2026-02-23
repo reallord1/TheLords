@@ -238,7 +238,7 @@ hindernisse = [
 
 stoppuhr = Stoppuhr()
 
-stern = Stern(random.randint(0, 650), 350) #####in arbeit
+stern = Stern(random.randint(0, 750), (random.randint(420, 580))) #####in arbeit
 
 
 #Kopfwelches einfügen werden
