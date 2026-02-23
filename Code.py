@@ -62,6 +62,7 @@ class Player:
     def __init__(self):
         self.x = 100
         self.y = 500 #höhe von player tiefer weil hintergrund neu ist
+        self.rect = py.Rect(self.x, self.y, spieler_breite, spieler_hoehe) ## colliderect funktioniert nur mit rect objekten
         self.velocity = 5
         self.left = False # für das richtige Bild
         self.right = False # für das richtige Bild
@@ -136,6 +137,8 @@ class Player:
                 screen.blit(stand_right, (self.x, self.y))
             else:
                 screen.blit(stand_left, (self.x, self.y))
+        
+        self.rect.topleft = (self.x, self.y) # colliderect funktioniert nur mit rect objekten
 
 
 #Kopf gleiches konzet wie bei class oben player und hindernis
@@ -205,22 +208,30 @@ class Stoppuhr:
 
         screen.blit(bild, (670, 10))
         
-    
-class Stern:
-    def __init__(self, x, y):
-        self.image = safe_load("star.png", (60, 60))
-        self.x = x
-        self.y = y
-        self.rect = py.Rect(self.x, self.y, 60, 60)
 
-    def respawn(self):
-        self.x = random.randint(50, 700)
-        self.rect.topleft = (self.x, self.y)
+
+
+class Stern:
+    def __init__(self):
+        self.image = safe_load("star.png", (60, 60))
+        self.x = random.randint(0, 740)
+        self.y = random.randint(450, 580)
+        self.rect = py.Rect(self.x, self.y, 60, 60)
 
     def draw(self):
         screen.blit(self.image, (self.x, self.y))
         self.rect.topleft = (self.x, self.y)
 
+    # sodass die sterne nach berührung von player respawnen
+    # https://github.com/search?q=pygame.Rect.collidelist+language%3APython&type=Code&l=Python
+    # untertützung von chatgot: hatte schwierigkeiten herauszufinden wo denn genau colliderect im code reinsoll --> gameloop oder oben...
+    def check_collision(self, player_rect):
+        if self.rect.colliderect(player_rect):
+          
+            self.x = random.randint(0, 740) # auf welcher breite der STern spawnen kann
+            self.y = random.randint(450, 580) # auf welche der höhe der stern spawnen kann
+            
+            self.rect.topleft = (self.x, self.y)# damit colliderate funktioniert
 
 # Objekte
 player = Player() # musste ich wie oben ändern --> anzahl elemente stimmten nicht überein --> Grund für Kollaps des Spieles
@@ -238,55 +249,51 @@ hindernisse = [
 
 stoppuhr = Stoppuhr()
 
-stern = Stern(random.randint(0, 750), (random.randint(420, 580))) #####in arbeit
+stern = Stern() #####in arbeit
 
 
-#Kopfwelches einfügen werden
+# für Hintergrund
+# https://github.com/search?q=pygame.key.get_pressed+language%3APython&type=Code&l=Python
 
-startbild = safe_load("Start_Bildschirm.png", (800, 800))
-game_started = False # Starthintergrund
+startbild = safe_load("Start_Bildschirm.png", (800, 800)) #starthintergrund
+game_started = False
 
-# game loop -
+
+
 running = True
 while running:
-    clock.tick(FPS)
+    clock.tick(FPS) # Zeit --> sekunden definiert
 
     for event in py.event.get():
         if event.type == py.QUIT:
             running = False
       
-    # für Hintergrund
-    # https://github.com/search?q=pygame.key.get_pressed+language%3APython&type=Code&l=Python
-    keys = py.key.get_pressed()
+    keys = py.key.get_pressed() # wenn die leertaste gedrückt wird is game started true --> normaler hintergrung initiiert --> mit boolean erzeugt 
     if keys[py.K_SPACE]:
-        game_started = True # mit boolean deffinieren
+        game_started = True 
     
     screen.fill((30, 30, 30))
     
-    screen.blit(background, (0, 0))
-
-    player.move()
-   
-    # für Startbild
     if not game_started:
-        screen.blit(startbild, (0, 0)) # an oberster ecke wird bild reinkopiert
+        
+        screen.blit(startbild, (0, 0)) # startbildschirm wird gezeigt
     else:
-        screen.blit(hintergrundbild , (0, 0))
-
-
-    for h in hindernisse:
-        h.draw()
+        
+        screen.blit(background, (0, 0)) # normaler Hintergrund erscheint mit dem Player, Hindernissen, Kopfm Stoppuhr, Stern etc...
+        
     
-    player.draw()
-
-
-    kopf.draw()
+        
+        for h in hindernisse:
+            h.draw()
+        
+        kopf.draw()
+        
+        stoppuhr.draw()
+        stern.draw()
+        
+        stern.check_collision(player.rect) # collision wird aufgerufen
+        
+        player.move()
+        player.draw()
     
-    stoppuhr.draw()
-    stern.draw()
-
-    
-
-    py.display.flip()
-
-py.quit()
+    py.display.flip() # https://realpython.com/pygame-a-primer/#background-and-setup
