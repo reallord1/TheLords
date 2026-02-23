@@ -203,6 +203,22 @@ class Stoppuhr:
             bild = py.transform.scale(self.image, (120, 120))
 
         screen.blit(bild, (670, 10))
+        
+    
+class Stern:
+    def __init__(self, x, y):
+        self.image = safe_load("star.png", (60, 60))
+        self.x = x
+        self.y = y
+        self.rect = py.Rect(self.x, self.y, 60, 60)
+
+    def respawn(self):
+        self.x = random.randint(50, 700)
+        self.rect.topleft = (self.x, self.y)
+
+    def draw(self):
+        screen.blit(self.image, (self.x, self.y))
+        self.rect.topleft = (self.x, self.y)
 
 
 # Objekte
@@ -221,6 +237,7 @@ hindernisse = [
 
 stoppuhr = Stoppuhr()
 
+stern = Stern(random.randint(0, 650), 350) #####in arbeit
 
 
 #Kopfwelches einfügen werden
@@ -251,6 +268,7 @@ while running:
     kopf.draw()
     
     stoppuhr.draw()
+    stern.draw()
 
     
 
