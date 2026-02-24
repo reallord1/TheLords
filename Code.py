@@ -215,7 +215,7 @@ class Stern:
     def __init__(self):
         self.image = safe_load("star.png", (60, 60))
         self.x = random.randint(0, 740)
-        self.y = random.randint(450, 580)
+        self.y = random.randint(420, 580)
         self.rect = py.Rect(self.x, self.y, 60, 60)
 
     def draw(self):
@@ -295,5 +295,15 @@ while running:
         
         player.move()
         player.draw()
-    
+        
+        
+########       erster versuch game over
+#class game_over
+#    if not self.ducken and self.augen_offen
+#    game_over = True
+#    if not hinter hinderniss ans self.augen_offen
+#    game_over = True
+#    elif
+#    game_over = False
+######    
     py.display.flip() # https://realpython.com/pygame-a-primer/#background-and-setup
