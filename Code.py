@@ -305,5 +305,5 @@ while running:
 #    game_over = True
 #    elif
 #    game_over = False
-######    
+######
     py.display.flip() # https://realpython.com/pygame-a-primer/#background-and-setup
