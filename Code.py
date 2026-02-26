@@ -252,6 +252,12 @@ stoppuhr = Stoppuhr()
 stern = Stern() #####in arbeit
 
 
+# score machen
+# https://www.makeuseof.com/pygame-game-scores-displaying-updating/?utm_source=chatgpt.com
+score = 0
+font = py.font.SysFont(None, 40)
+
+
 # für Hintergrund
 # https://github.com/search?q=pygame.key.get_pressed+language%3APython&type=Code&l=Python
 
@@ -291,10 +297,18 @@ while running:
         stoppuhr.draw()
         stern.draw()
         
-        stern.check_collision(player.rect) # collision wird aufgerufen
+        if stern.rect.colliderect(player.rect): # collision wird aufgerufen
         
+            score += 1
+            stern.x = random.randint(0, 740)
+            stern.y = random.randint(450, 580)
+            stern.rect.topleft = (stern.x, stern.y)
+            
         player.move()
         player.draw()
+        
+        text = font.render("Score: " + str(score), True, (0, 0, 0))
+        screen.blit(text, (20, 20))
         
         
 ########       erster versuch game over
@@ -306,4 +320,5 @@ while running:
 #    elif
 #    game_over = False
 ######
+
     py.display.flip() # https://realpython.com/pygame-a-primer/#background-and-setup
