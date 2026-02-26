@@ -264,6 +264,8 @@ font = py.font.SysFont(None, 40)
 startbild = safe_load("Start_Bildschirm.png", (800, 800)) #starthintergrund
 game_started = False
 
+wonbild = safe_load("Won_Bildschirm.png", (800, 800)) # gewinnerhintergrund
+
 
 
 running = True
@@ -298,11 +300,18 @@ while running:
         stern.draw()
         
         if stern.rect.colliderect(player.rect): # collision wird aufgerufen
-        
             score += 1
             stern.x = random.randint(0, 740)
-            stern.y = random.randint(450, 580)
+            stern.y = random.randint(460, 580)
             stern.rect.topleft = (stern.x, stern.y)
+            
+        #https://www.pygame.org/docs/ref/time.html#pygame.time.wait
+        if score == 10: # damit das spiel nach 10 geholten sternen passt
+            screen.blit(wonbild, (0, 0))
+            py.display.update()
+            py.time.wait(5000)   # damit der hintergrund nicht bleibt
+            running = False   # spiel stoppt
+            
             
         player.move()
         player.draw()
