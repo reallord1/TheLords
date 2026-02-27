@@ -255,7 +255,7 @@ stern = Stern() #####in arbeit
 # score machen
 # https://www.makeuseof.com/pygame-game-scores-displaying-updating/?utm_source=chatgpt.com
 score = 0
-font = py.font.SysFont(None, 40)
+font = py.font.SysFont(None, 40) #-> Man sieht den score nicht auf jedem Laptop, ich sehe ihn nicht, die anderen schon
 
 
 # für Hintergrund
@@ -306,7 +306,7 @@ while running:
             stern.rect.topleft = (stern.x, stern.y)
             
         #https://www.pygame.org/docs/ref/time.html#pygame.time.wait
-        if score == 10: # damit das spiel nach 10 geholten sternen passt
+        if score == 20: # damit das spiel nach 20 geholten sternen passt -> 10 zu kurz
             screen.blit(wonbild, (0, 0))
             py.display.update()
             py.time.wait(5000)   # damit der hintergrund nicht bleibt
