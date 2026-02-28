@@ -324,7 +324,7 @@ while running:
                 
                    
                     #schauen ob der Player auf ca. gleichen höhe ist wie Hindernisse : ca ist wichtig, weil wenn genau ist, code vorher nicht funktioniert hat
-                    if player.y + spieler_hoehe > h.y:
+                    if player.rect.bottom > hindernis_rect.top: # ist untersterteil des player weiter oben als der radius des quadrates wo er sicher ist : zum sehen ob er im radius bzw sicher ist
                         hinter_hindernis = True
                         
 
