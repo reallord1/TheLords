@@ -309,7 +309,6 @@ while running:
         # immer wenn "augen_offen.png" dort ist und der Player nicht hinter einem Hindernis ist: "End_Bildschirm.png"
         # (hat zuerst nicht mit colliderect feature nicht funktioniert, weil es ungenau war)
         if kopf.zeige_offen: #  # schauen ob auge_offen.png an ist
-            
             hinter_hindernis = False # neuer Boolean
             
             for h in hindernisse:
