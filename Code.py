@@ -62,7 +62,7 @@ class Player:
     def __init__(self):
         self.x = 100
         self.y = 500 #höhe von player tiefer weil hintergrund neu ist
-        self.rect = py.Rect(self.x, self.y, spieler_breite, spieler_hoehe) ## colliderect funktioniert nur mit rect objekten
+        self.rect = py.Rect(self.x, self.y, spieler_breite, spieler_hoehe) ##  colliderect funktioniert nur mit rect objekten ; https://www.geeksforgeeks.org/python/adding-collisions-using-pygame-rect-colliderect-in-pygame/?utm_source=chatgpt.com
         self.velocity = 5
         self.left = False # für das richtige Bild
         self.right = False # für das richtige Bild
@@ -224,7 +224,7 @@ class Stern:
 
     # sodass die sterne nach berührung von player respawnen
     # https://github.com/search?q=pygame.Rect.collidelist+language%3APython&type=Code&l=Python
-    # untertützung von chatgot: hatte schwierigkeiten herauszufinden wo denn genau colliderect im code reinsoll --> gameloop oder oben...
+    # untertützung von chatgpt: hatte schwierigkeiten herauszufinden wo denn genau colliderect im code reinsoll --> gameloop oder oben...
     def check_collision(self, player_rect):
         if self.rect.colliderect(player_rect):
           
@@ -240,9 +240,9 @@ player = Player() # musste ich wie oben ändern --> anzahl elemente stimmten nic
 
 # musste wieder angepasst werden also zurück wie am Anfang, weil ich sonst nicht die grössse von jedem Hinderniss seperat ändern könnte
 hindernisse = [
-    Hindernis("chocolate.png", 200, 200, 390, 457),
-    Hindernis("cake.png", 170, 170, 630, 480),
-    Hindernis("microwave.png", 200, 200, 50, 465),
+    Hindernis("chocolate.png", 200, 200, 350, 457),
+    Hindernis("cake.png", 170, 170, 640, 480),
+    Hindernis("microwave.png", 200, 200, 10, 465),
     ##Hindernis("sneaker.png", 310, 260, 440),
 ]
 
@@ -253,7 +253,7 @@ stern = Stern() #####in arbeit
 
 
 # score machen
-# https://www.makeuseof.com/pygame-game-scores-displaying-updating/?utm_source=chatgpt.com
+# https://www.makeuseof.com/pygame-game-scores-displaying-updating/
 score = 0
 font = py.font.SysFont(None, 40) #-> Man sieht den score nicht auf jedem Laptop, ich sehe ihn nicht, die anderen schon
 
@@ -263,6 +263,10 @@ font = py.font.SysFont(None, 40) #-> Man sieht den score nicht auf jedem Laptop,
 
 startbild = safe_load("Start_Bildschirm.png", (800, 800)) #starthintergrund
 game_started = False
+
+# für endbildschirm
+endbild = safe_load("End_Bildschirm.png", (800, 800))
+game_over = False
 
 wonbild = safe_load("Won_Bildschirm.png", (800, 800)) # gewinnerhintergrund
 
@@ -275,7 +279,8 @@ while running:
     for event in py.event.get():
         if event.type == py.QUIT:
             running = False
-      
+            
+    # https://github.com/search?q=pygame.key.get_pressed+language%3APython&type=Code&l=Python 
     keys = py.key.get_pressed() # wenn die leertaste gedrückt wird is game started true --> normaler hintergrung initiiert --> mit boolean erzeugt 
     if keys[py.K_SPACE]:
         game_started = True 
@@ -285,6 +290,11 @@ while running:
     if not game_started:
         
         screen.blit(startbild, (0, 0)) # startbildschirm wird gezeigt
+        
+    elif game_over:
+        
+        screen.blit(endbild, (0, 0))# endbildschirm wird angezeigt
+        
     else:
         
         screen.blit(background, (0, 0)) # normaler Hintergrund erscheint mit dem Player, Hindernissen, Kopfm Stoppuhr, Stern etc...
@@ -296,9 +306,36 @@ while running:
         
         kopf.draw()
         
+        # immer wenn "augen_offen.png" dort ist und der Player nicht hinter einem Hindernis ist: "End_Bildschirm.png"
+        # (hat zuerst nicht mit colliderect feature nicht funktioniert, weil es ungenau war)
+        if kopf.zeige_offen: #  # schauen ob auge_offen.png an ist
+            
+            hinter_hindernis = False # neuer Boolean
+            
+            for h in hindernisse:
+                hindernis_rect = py.Rect(h.x, h.y, h.image.get_width(), h.image.get_height()) # die höhe und breite der Hindernisse aufrufen
+                 
+                # chatgpt gefragt, was für ein feature es braucht zum zeigen das die figur im Radius ist --> contains
+                # https://www.pygame.org/docs/ref/rect.html#pygame.Rect.contains
+                #https://github.com/search?q=pygame.Rect.contains+language%3APython&type=Code&l=Python
+                #der Player muss im kompletten radius von sicherer Ort bzw vom sicheren rectangle rect.sein
+                if hindernis_rect.contains(player.rect):
+                    hinter_hindernis = True
+                
+                   
+                    #schauen ob der Player auf ca. gleichen höhe ist wie Hindernisse : ca ist wichtig, weil wenn genau ist, code vorher nicht funktioniert hat
+                    if player.y + spieler_hoehe > h.y:
+                        hinter_hindernis = True
+                        
+
+        # wenn Player nicht hinter hindernis ist --> game over & End_Bildschirm wird aktiviert
+        if not hinter_hindernis:
+            game_over = True
+        
         stoppuhr.draw()
         stern.draw()
         
+        # https://www.geeksforgeeks.org/python/adding-collisions-using-pygame-rect-colliderect-in-pygame/?utm_source=chatgpt.com
         if stern.rect.colliderect(player.rect): # collision wird aufgerufen
             score += 1
             stern.x = random.randint(0, 740)
