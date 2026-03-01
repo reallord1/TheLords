@@ -279,6 +279,8 @@ def reset_game():
     
     kopf.zeige_offen = True # damit man nciht direkt wider stirbt
     kopf.last_switch = py.time.get_ticks()  # Reset der Blinzel-Timer -> Jil hat es oben verwendet desshalb auf diese Idee gekommen
+    
+    py.mixer.music.play(-1)   # Musik wieder starten wen Speil wieder started
 
 
 
@@ -293,11 +295,12 @@ while running: # solange running Variable wahr ist...
 #Hintergrundmusik ein/aus
         if event.type == py.KEYDOWN:
             if event.key == py.K_m:  # Taste M für Musik ein aus
-                if bg_paused:
+                if background_paused:
                     py.mixer.music.unpause()
                 else:
                     py.mixer.music.pause()
-                bg_paused = not bg_paused
+                background_paused = not background_paused
+
             
             
     # https://github.com/search?q=pygame.key.get_pressed+language%3APython&type=Code&l=Python 
@@ -330,6 +333,8 @@ while running: # solange running Variable wahr ist...
             h.draw()
         
         kopf.draw()
+        
+        hinter_hindernis = True # damit die Variabel überhaupt existiert
         
         # immer wenn "augen_offen.png" dort ist und der Player nicht hinter einem Hindernis ist: "End_Bildschirm.png"
         # (hat zuerst nicht mit colliderect feature nicht funktioniert, weil es ungenau war)
