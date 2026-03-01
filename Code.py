@@ -6,10 +6,16 @@ import random # damit wir die random funktion benutzen können
 py.init() # damit wir sounds, grafiken etc benutzen können
 
 
-# Hintergrundmusik
+# Hintergrundmusik -> Sound laden
 py.mixer.music.load("game_music.wav")
 py.mixer.music.set_volume(0.5)
 py.mixer.music.play(-1)  # -1 = Endlosschleife
+
+jump_sound = py.mixer.Sound("jump_sound.wav")
+jump_sound.set_volume(0.6)
+
+duck_sound = py.mixer.Sound("ducken_sound.wav")
+duck_sound.set_volume(0.6)
 
 background_paused = False
 
@@ -78,9 +84,14 @@ class Player:
         if keys[py.K_UP] and not self.jump:
             self.jump = True
             self.jumpCount = 0 # setzt auf erstes Bild von Player wenn er springen soll zurück wenn SPiel anfängt
-       
-
-        self.ducken = keys[py.K_DOWN] and not (moving_left or moving_right)
+            jump_sound.play() # Sound spielen 
+            
+            
+        if keys[py.K_DOWN] and not self.ducken and not (moving_left or moving_right):
+            self.ducken = True
+            duck_sound.play() # Sound spielen
+        elif not keys[py.K_DOWN]:
+            self.ducken = False
 
         if moving_left and self.x > -45: # self.x > -45 damit er nicht aus dem Bild geht nur halbt drausen maximal
             self.x -= self.velocity # wie schnell er laufen  kann
