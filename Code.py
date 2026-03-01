@@ -1,5 +1,5 @@
 ### Hide and Seek ### Gil, Gimmy und Finnosaurus
-import pygame as py # abkürzung von pygame --> übersichtlicher und schneller bei code schreiben
+import pygame as py # abkürzung von pygame --> übersichtlicher und schneller bei code
 import random # damit wir die random funktion benutzen können
 
 
@@ -182,20 +182,18 @@ class Hindernis:
 
 # Stoppuhr -- musste angepasst werden weil die anzahl "elemente" breite und hoehe etc nicht den anderen einheitlich oben gleich waren --> führte zu immenser Frustration während vier tagen um herauszufinden was falsch war
 class Stoppuhr:
-    def __init__(self): 
-        self.image = load_img("Stoppuhr.png", (120, 120)) #"Stoppuhr.png" Bild von Chatgpt generieren lassen
+    def __init__(self):
+        self.image1 = load_img("Stoppuhr_1.png", (120, 120)) #"Stoppuhr_1.png" & "Stoppuhr_alarm.png" Bild von Chatgpt generieren lassen
+        self.image2 = load_img("Stoppuhr_alarm.png", (120, 120))
 
     def draw(self):
+        time = py.time.get_ticks()
        
-        sekunden = py.time.get_ticks() // 500 # definiert die sekunden mit 1000 ms einheit
-        
-        if sekunden % 2 == 0: # jede gerade sekunde wird stoppuhr kleiner 
-            bild = py.transform.scale(self.image, (100, 100)) # grösse von SToppuhr 
+        if (time // 400) % 2 == 0: # jede 400 ms werden die Bilder gewechselt # Die zeit dividuert durch 400ms und gerundet --> wenn gerade  Zahl dann image 1 gezeigt sonst image 2
+            screen.blit(self.image1, (670, 10)) # wo die Bilder auftauchen
         else:
-            # jede ungerade sekunde wird stoppuhr grösser
-            bild = py.transform.scale(self.image, (120, 120)) # Grösse von Stoppuhr
-
-        screen.blit(bild, (670, 10)) # beschreibt wo sich die Stoppuhr befindet
+            screen.blit(self.image2, (670, 10))
+            
         
 
 
