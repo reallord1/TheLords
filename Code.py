@@ -6,10 +6,16 @@ import random # damit wir die random funktion benutzen können
 py.init() # damit wir sounds, grafiken etc benutzen können
 
 
-# Hintergrundmusik -> Sound laden
+# Hintergrundmusik -> Sound laden -> am beispiel von Ihnen weiterentwickelt
 py.mixer.music.load("game_music.wav")
 py.mixer.music.set_volume(0.5)
 py.mixer.music.play(-1)  # -1 = Endlosschleife
+
+game_over_sound = py.mixer.Sound("game_over_sound.wav")
+game_over_sound.set_volume(0.8) #gut hörbar
+
+win_sound = py.mixer.Sound("win_sound.wav")
+win_sound.set_volume(0.9) #noch besser höhrbar wie game_over, da wichtiger
 
 jump_sound = py.mixer.Sound("jump_sound.wav")
 jump_sound.set_volume(0.6)
@@ -291,6 +297,7 @@ def reset_game():
     kopf.zeige_offen = True # damit man nciht direkt wider stirbt
     kopf.last_switch = py.time.get_ticks()  # Reset der Blinzel-Timer -> Jil hat es oben verwendet desshalb auf diese Idee gekommen
     
+    py.mixer.music.stop() # damit sicher nicht zwei übereinander sind 
     py.mixer.music.play(-1)   # Musik wieder starten wen Speil wieder started
 
 
@@ -370,9 +377,10 @@ while running: # solange running Variable wahr ist...
                         
 
         # wenn Player nicht hinter hindernis ist --> game over & End_Bildschirm wird aktiviert
-        if not hinter_hindernis:
+        if not hinter_hindernis and not game_over: # and not game_over: damit er nur einmal abgespielt wird
             game_over = True
             py.mixer.music.pause() #wenn verloren keine Musik mehr
+            game_over_sound.play() # game_over Sound spielen
 
         
         stoppuhr.draw()
@@ -386,8 +394,9 @@ while running: # solange running Variable wahr ist...
             stern.rect.topleft = (stern.x, stern.y) # linker eckpunkt vom STern  ist definiert höhe und wie breit worden
             
         #https://www.pygame.org/docs/ref/time.html#pygame.time.wait
-        if score == 20: # damit das spiel nach 20 geholten sternen passt -> 10 zu kurz
+        if score == 3: # damit das spiel nach 20 geholten sternen passt -> 10 zu kurz
             py.mixer.music.pause() # keine Musik wenn gewonnen
+            win_sound.play() # win sound spielen
             screen.blit(wonbild, (0, 0)) 
             py.display.update() # updated bildschirm
             py.time.wait(5000)   # Hintergrund bleibt für nur 5 Sekunden
