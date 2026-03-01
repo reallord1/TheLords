@@ -1,5 +1,5 @@
 ### Hide and Seek ### Gil, Gimmy und Finnosaurus
-import pygame as py
+import pygame as py # abkürzung von pygame --> übersichtlicher und schneller bei code schreiben
 import random # damit wir die random funktion benutzen können
 
 
