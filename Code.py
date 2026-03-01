@@ -11,6 +11,9 @@ py.mixer.music.load("game_music.wav")
 py.mixer.music.set_volume(0.5)
 py.mixer.music.play(-1)  # -1 = Endlosschleife
 
+star_sound = py.mixer.Sound("star_sound.wav")
+star_sound.set_volume(0.9)
+
 game_over_sound = py.mixer.Sound("game_over_sound.wav")
 game_over_sound.set_volume(0.8) #gut hörbar
 
@@ -389,12 +392,14 @@ while running: # solange running Variable wahr ist...
         # https://www.geeksforgeeks.org/python/adding-collisions-using-pygame-rect-colliderect-in-pygame/?utm_source=chatgpt.com
         if stern.rect.colliderect(player.rect): # collidirect  wird aufgerufen
             score += 1 # immer wenn stern und player colliden --> score wird um einen Punkt höher
+            star_sound.stop() #wenn man sehr schnell hintereinander zwei Sterne einsammelt, kann der zweite "verschluckt werdem", so nicht mehr
+            star_sound.play() #stern sound
             stern.x = random.randint(0, 740) # wo sich der Stern auftauchen (random) kann
             stern.y = random.randint(460, 580)
             stern.rect.topleft = (stern.x, stern.y) # linker eckpunkt vom STern  ist definiert höhe und wie breit worden
             
         #https://www.pygame.org/docs/ref/time.html#pygame.time.wait
-        if score == 20: # damit das spiel nach 20 geholten sternen passt -> 10 zu kurz
+        if score == 15: # damit das spiel nach 20 geholten sternen passt -> 10 zu kurz -> zu 15 geändert 20 eher zu lang
             py.mixer.music.stop() # keine Musik wenn gewonnen
             win_sound.play() # win sound spielen
             screen.blit(wonbild, (0, 0)) 
