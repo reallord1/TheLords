@@ -260,6 +260,20 @@ wonbild = load_img("Won_Bildschirm.png", (800, 800)) # gewinnerhintergrund
 
 
 
+def reset_game():
+    global player, stern, score, game_over, game_started # global, da die Variabeln ausserhalb dieser Funktion deffiniert sind -> ChatGPT Idee gebracht, da es nicht funktioniert hat
+    
+    player = Player()   # neuer Spieler
+    stern = Stern()     # neuer Stern
+    score = 0           # Score zurücksetzen
+    game_over = False # damit Game nicht fertig ist
+    game_started = True # damit Game wieder läuft
+    
+    kopf.zeige_offen = True # damit man nciht direkt wider stirbt
+    kopf.last_switch = py.time.get_ticks()  # Reset der Blinzel-Timer -> Jil hat es oben verwendet desshalb auf diese Idee gekommen
+
+
+
 running = True
 while running: # solange running Variable wahr ist...
     clock.tick(FPS) # Zeit --> sekunden definiert
@@ -269,9 +283,14 @@ while running: # solange running Variable wahr ist...
             running = False
             
     # https://github.com/search?q=pygame.key.get_pressed+language%3APython&type=Code&l=Python 
-    keys = py.key.get_pressed() # wenn die leertaste gedrückt wird is game started true --> normaler hintergrung initiiert --> mit boolean erzeugt 
+    keys = py.key.get_pressed() # wenn die leertaste gedrückt wird is game started true --> normaler hintergrung initiiert --> mit boolean erzeugt
     if keys[py.K_SPACE]:
-        game_started = True 
+        if not game_started:
+            game_started = True
+        elif game_over: # damit es geht, wenn man restarted, nachdem man verloren hat
+            reset_game()
+            
+ 
     
     screen.fill((30, 30, 30))
     
@@ -343,7 +362,8 @@ while running: # solange running Variable wahr ist...
         
         text = font.render("Score: " + str(score), True, (0, 0, 0)) # WIrd in Zahl umgewandlet mit str, und (0,0,0) sagt welche Farbe der Text sein soll (SChwarz)
         screen.blit(text, (20, 20)) # wo der score angezeigt wird (linker echen oben)
-        
+
+
         
     py.display.flip() # https://realpython.com/pygame-a-primer/#background-and-setup
       # haben auch mit dieser Website gearbeitet: https://realpython.com/pygame-a-primer/
