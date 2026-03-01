@@ -379,7 +379,7 @@ while running: # solange running Variable wahr ist...
         # wenn Player nicht hinter hindernis ist --> game over & End_Bildschirm wird aktiviert
         if not hinter_hindernis and not game_over: # and not game_over: damit er nur einmal abgespielt wird
             game_over = True
-            py.mixer.music.pause() #wenn verloren keine Musik mehr
+            py.mixer.music.stop() #wenn verloren keine Musik mehr
             game_over_sound.play() # game_over Sound spielen
 
         
@@ -394,8 +394,8 @@ while running: # solange running Variable wahr ist...
             stern.rect.topleft = (stern.x, stern.y) # linker eckpunkt vom STern  ist definiert höhe und wie breit worden
             
         #https://www.pygame.org/docs/ref/time.html#pygame.time.wait
-        if score == 3: # damit das spiel nach 20 geholten sternen passt -> 10 zu kurz
-            py.mixer.music.pause() # keine Musik wenn gewonnen
+        if score == 20: # damit das spiel nach 20 geholten sternen passt -> 10 zu kurz
+            py.mixer.music.stop() # keine Musik wenn gewonnen
             win_sound.play() # win sound spielen
             screen.blit(wonbild, (0, 0)) 
             py.display.update() # updated bildschirm
