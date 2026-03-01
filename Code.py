@@ -314,6 +314,7 @@ while running:
             for h in hindernisse:
                 hindernis_rect = py.Rect(h.x, h.y, h.image.get_width(), h.image.get_height()) # die höhe und breite der Hindernisse aufrufen
                  
+            
                 # chatgpt gefragt, was für ein feature es braucht zum zeigen das die figur im Radius ist --> contains
                 # https://www.pygame.org/docs/ref/rect.html#pygame.Rect.contains
                 #https://github.com/search?q=pygame.Rect.contains+language%3APython&type=Code&l=Python
