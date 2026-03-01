@@ -1,91 +1,81 @@
 ### Hide and Seek ### Gil, Gimmy und Finnosaurus
 import pygame as py
-import random
-import sys
-from pathlib import Path
+import random # damit wir die random funktion benutzen können
 
-py.init()
+
+py.init() # damit wir sounds, grafiken etc benutzen können
 
 
 # Grund Ding
-win_size = (800, 800)
+win_size = (800, 800) # definiert grösse vom Bildschirm
 screen = py.display.set_mode(win_size)
-py.display.set_caption("Hide and Seek")
-clock = py.time.Clock()
+clock = py.time.Clock() # iniziisert das Zeit feature --> alles im FPS wiederholt sich immer jede minute
 FPS = 60
 
- 
-# "safe image loader" -> weil wir grosse schwierigkeiten mit unseren Bilddateien hatten --> "CORRUPTED Files" in der Kommandozeile abgegeben und wir hatten nur einen schwarzen Hintergrund
-# https://www.pygame.org/docs/ref/image.html?highlight=image#module-pygame.image --> 
-def safe_load(path, size=None):
-    try:
-        p = Path(path)
-        if not p.exists():
-            raise FileNotFoundError
+# Chatgpt gefragt wie man den code übersichtlicher machen kann und hat load_img funktion vorgeschlagen
+# https://github.com/search?q=pygame.image.load+language%3APython&type=Code&l=Python ; https://github.com/search?q=pygame.Surface.convert_alpha+language%3APython&type=Code&l=Python
 
-        img = py.image.load(str(p)).convert_alpha()
-
-        if size:
-            img = py.transform.scale(img, size)
-
-        return img
-    except:
-        # If image fails, return a visible fallback surface
-        surf = py.Surface(size if size else (100, 100))
-        surf.fill((255, 0, 255))  # bright purple = broken image
-        print(f"[WARNING] Failed loading: {path}")
-        return surf
+def load_img(path, size=None): # Bild Laden (damit die codes kompakter schreiben kann) 
+    img = py.image.load(path).convert_alpha() # convert alpha damit der transparente Teil vom Bild nicht schwarz wird --> vorheriges Problem
+    if size is not None:
+        img = py.transform.scale(img, size)
+    return img
     
-background = safe_load("Hintergrund.png", (800, 800)) # neu mit safe load :) --> keine corrupted files yuhu
+background = py.transform.scale(
+    py.image.load("Hintergrund.png").convert_alpha(),
+    (800, 800)
+)
 
 # Grösse vom Spieler
 spieler_breite = 90
 spieler_hoehe = 130
 
 # bewegen vom player ; https://www.geeksforgeeks.org/python/pygame-character-animation/ -> Dannach noch ausgeschnitten und vormatiert
-WalkRight = [safe_load(f"pictures/johannes/run.r.{i}.png", (spieler_breite, spieler_hoehe)) for i in range(1, 9)] # Liste von Bildern wird erstellt --> für jede Zahl ein bild von Johannes gegeben
-WalkLeft  = [safe_load(f"pictures/johannes/run.l.{i}.png", (spieler_breite, spieler_hoehe)) for i in range(1, 9)]
-JumpRight = [safe_load(f"pictures/johannes/Jump.r.{i}.png", (spieler_breite, spieler_hoehe)) for i in range(1, 5)]
-JumpLeft  = [safe_load(f"pictures/johannes/Jump.l.{i}.png", (spieler_breite, spieler_hoehe)) for i in range(1, 5)]
+WalkRight = [load_img(f"pictures/johannes/run.r.{i}.png", (spieler_breite, spieler_hoehe)) for i in range(1, 9)] # Liste von Bildern wird erstellt --> für jede Zahl ein bild von Johannes gegeben
+WalkLeft  = [load_img(f"pictures/johannes/run.l.{i}.png", (spieler_breite, spieler_hoehe)) for i in range(1, 9)]
+JumpRight = [load_img(f"pictures/johannes/Jump.r.{i}.png", (spieler_breite, spieler_hoehe)) for i in range(1, 5)]
+JumpLeft  = [load_img(f"pictures/johannes/Jump.l.{i}.png", (spieler_breite, spieler_hoehe)) for i in range(1, 5)]
 
 # stehende Bilder laden
-stand_right = safe_load("pictures/johannes/stand.r.png", (spieler_breite, spieler_hoehe))
-stand_left  = safe_load("pictures/johannes/stand.l.png", (spieler_breite, spieler_hoehe))
+stand_right = load_img("pictures/johannes/stand.r.png", (spieler_breite, spieler_hoehe))
+stand_left  = load_img("pictures/johannes/stand.l.png", (spieler_breite, spieler_hoehe))
 
+# sitzende Bilder Laden
 duck_hoehe = 100 # er wird kleiner wenn er sich duckt
-sit_right = safe_load("pictures/johannes/sit.r.png", (spieler_breite, duck_hoehe))
-sit_left  = safe_load("pictures/johannes/sit.l.png", (spieler_breite, duck_hoehe))
+sit_right = load_img("pictures/johannes/sit.r.png", (spieler_breite, duck_hoehe)) 
+sit_left  = load_img("pictures/johannes/sit.l.png", (spieler_breite, duck_hoehe))
 
 
 # Player
 class Player:
     def __init__(self):
         self.x = 100
-        self.y = 500 #höhe von player tiefer weil hintergrund neu ist
-        self.rect = py.Rect(self.x, self.y, spieler_breite, spieler_hoehe) ##  colliderect funktioniert nur mit rect objekten ; https://www.geeksforgeeks.org/python/adding-collisions-using-pygame-rect-colliderect-in-pygame/?utm_source=chatgpt.com
-        self.velocity = 5
+        self.y = 500 # wei weit oben und links/rechts der Player ist
+        self.rect = py.Rect(self.x, self.y, spieler_breite, spieler_hoehe) ##  colliderect funktioniert nur mit rect objekten ; radius definieren nur mit rectanges; https://www.geeksforgeeks.org/python/adding-collisions-using-pygame-rect-colliderect-in-pygame/?utm_source=chatgpt.com
+        self.velocity = 5 # wie schnell der Player laufen kann
         self.left = False # für das richtige Bild
         self.right = False # für das richtige Bild
-        self.walkCount = 0
+        self.walkCount = 0 # setzt auf erstes Bild von Player zurück wenn SPiel anfängt
         self.ducken = False # für das richtige Bild
-        self.last_direction = "right"
-        self.jump = False
-        self.jumpCount = 0
-        self.start_y = self.y
+        self.last_direction = "right" #
+        self.jump = False # sehen ob Player am springen ist --> im späteren bewegungs Code wichtig
+        self.jumpCount = 0 # setzt auf erstes Bild von Player wenn er springen soll zurück wenn SPiel anfängt
+        self.start_y = self.y # damit wir kontrollieren wie hoch er springen kann
 
     def move(self):
-        keys = py.key.get_pressed()
+        keys = py.key.get_pressed() # wenn diese taste gedrückt wird, bewegt er sich so...
         moving_left  = keys[py.K_LEFT]
         moving_right = keys[py.K_RIGHT]
 
         if keys[py.K_UP] and not self.jump:
             self.jump = True
-            self.jumpCount = 0
+            self.jumpCount = 0 # setzt auf erstes Bild von Player wenn er springen soll zurück wenn SPiel anfängt
+       
 
         self.ducken = keys[py.K_DOWN] and not (moving_left or moving_right)
 
         if moving_left and self.x > -45: # self.x > -45 damit er nicht aus dem Bild geht nur halbt drausen maximal
-            self.x -= self.velocity
+            self.x -= self.velocity # wie schnell er laufen  kann
             self.left = True # Bilder
             self.right = False # Bilder
             self.last_direction = "left" # für das richtige Bild
@@ -97,19 +87,19 @@ class Player:
         else:
             self.left = False
             self.right = False
-            self.walkCount = 0
+            self.walkCount = 0 # Bild wieder auf erste wenn Player einfach steht
 
         if self.jump:
-            if self.jumpCount < 28:
-                self.y = self.start_y - (28 - self.jumpCount) * 2.4
+            if self.jumpCount < 28: # frames: solange jumpCount weniger als 28 ist, geht der player nach oben
+                self.y = self.start_y - (28 - self.jumpCount) * 2.4 # berechnet wie hoch der player springt und macht dass er dann wieder zurück auf den Boden fällt
             else:
                 self.y = self.start_y
-                self.jump = False
+                self.jump = False # zeigt das Sprung vorbei ist
             self.jumpCount += 1
 
     def draw(self):
-        if self.jump:
-            frame = min(self.jumpCount // 6, 3)
+        if self.jump: # alles hier passiert nur wenn der Player gerade am Springen ist
+            frame = min(self.jumpCount // 6, 3) # zeigt welche Bilder animation von ihm angezeigt werden
             if self.last_direction == "right":
                 screen.blit(JumpRight[frame], (self.x, self.y))
             else:
@@ -117,24 +107,24 @@ class Player:
             return
 
         if self.ducken:
-            if self.last_direction == "right":
+            if self.last_direction == "right": # das richtige sprungbild wird ausgewählt abhängig davon zu welcher Seite der Player läuft
                 screen.blit(sit_right, (self.x, self.y + 30))
             else:
                 screen.blit(sit_left, (self.x, self.y + 30))
             return
 
-        if self.walkCount + 1 >= 24:
+        if self.walkCount + 1 >= 24: # nachdem alle Frames durchgegangen sind fängt es wieder von vorne an: erstes Bild wird wieder gezeigt
             self.walkCount = 0
 
         if self.left:
-            screen.blit(WalkLeft[self.walkCount // 3], (self.x, self.y))
+            screen.blit(WalkLeft[self.walkCount // 3], (self.x, self.y)) # jedes Bild wird ein Frame(Einzelnes Bild im Python STyle) angezeigt --> insgesamt 8 Bilder also / 8 Bilder mal 3 Frames = 24 
             self.walkCount += 1
         elif self.right:
             screen.blit(WalkRight[self.walkCount // 3], (self.x, self.y))
             self.walkCount += 1
         else:
-            if self.last_direction == "right":
-                screen.blit(stand_right, (self.x, self.y))
+            if self.last_direction == "right": # spieler schaut in die direktion in der er zuletzt gelaufen ist 
+                screen.blit(stand_right, (self.x, self.y)) # blit zeigt bild auf Bildschirm an
             else:
                 screen.blit(stand_left, (self.x, self.y))
         
@@ -142,141 +132,141 @@ class Player:
 
 
 #Kopf gleiches konzet wie bei class oben player und hindernis
-
 class Kopf:
     def __init__(self, x, y):
-        self.x = x
+        self.x = x # wo ist der Kopf... (unten genaue koordinaten geschrieben)
         self.y = y
        
-        self.augen_offen = safe_load("augen_offen.png")
-        self.augen_offen = py.transform.scale(self.augen_offen, (300, 500))
+        self.augen_offen = load_img("augen_offen.png") # definiert
+        self.augen_offen = py.transform.scale(self.augen_offen, (300, 500)) # grösse angepasst/definiert
 
-        self.augen_zu = safe_load("augen_zu.png")
+        self.augen_zu = load_img("augen_zu.png")
         self.augen_zu = py.transform.scale(self.augen_zu, (300, 500))
 
-        self.zeige_offen = True  # bild am Anfang
+        self.zeige_offen = True  #  dieses Bild wird am Anfang gezeigt
 
-        # blinzeln jede 4 sek -_> bilder wechseln
+        # blinzeln jede 4 sek --> bilder (aufen offen & zu)  wechseln
         # https://www.pygame.org/docs/ref/time.html#pygame.time.get_ticks
         self.last_switch = py.time.get_ticks()
         self.switch_interval = 2000 # 2 Sek
 
     def draw(self):
-        current_time = py.time.get_ticks()
+        current_time = py.time.get_ticks() # Zeiteinheit in milisekunden
         
         # schauen ob 4sek vorbei
-        if current_time - self.last_switch >= self.switch_interval:
+        if current_time - self.last_switch >= self.switch_interval: # schauen ob genug Zeit vergangen ist : Die Zeit die bis jetzt vergangen minus zeit wenn Bild zuletzt gewechelt wurde und grösser als zwei sekunden ist, wird das Bild gewechselt
             self.zeige_offen = not self.zeige_offen
-            self.last_switch = current_time
+            self.last_switch = current_time # speichert neue Zeit wenn Bild von Augen offen zuletzt dort war
 
-        # Bild zeigen
+        # Bilder von augen offen und augen zu werden überhaupt gezeigt
         if self.zeige_offen:
             screen.blit(self.augen_offen, (self.x, self.y))
         else: 
             screen.blit(self.augen_zu, (self.x, self.y))
             
-kopf = Kopf(250, 25)
+kopf = Kopf(250, 25) # Wo der Kopf genau liegt
 
 
 # Hindernisse
 class Hindernis:
-    def __init__(self, bild_pfad, breite, hoehe, x_position, y_position):
+    def __init__(self, bild_pfad, breite, hoehe, x_position, y_position): # beschreibungen von den versch Hindernissen
     
         self.x = x_position # ich kann wie weit rechts oder links die Gegenstände sind selber entscheiden
         self.y = y_position  # ich kann höhe von gegenständern manuel selber entscheiden              
-        self.image = safe_load(bild_pfad)
+        self.image = load_img(bild_pfad) #Bilder von Hindernissen können nun gezeigt werden . mit load_img kompakter
         
-        self.image = py.transform.scale(self.image, (breite, hoehe))
+        self.image = py.transform.scale(self.image, (breite, hoehe)) # anpassung von grösse von Hindernissen
 
     def draw(self):
-        screen.blit(self.image, (self.x, self.y))
+        screen.blit(self.image, (self.x, self.y)) # Bilder von Hindernissen werden angezeigt
 
-# Stoppuhr -- musste angepasst werden weil die anzahl "elemente" breite und hoehe etc nicht den anderen einheitlich oben gleich waren --> führte zu immense frustration während vier tagen um herauszufinden was falsch war
+# Stoppuhr -- musste angepasst werden weil die anzahl "elemente" breite und hoehe etc nicht den anderen einheitlich oben gleich waren --> führte zu immenser Frustration während vier tagen um herauszufinden was falsch war
 class Stoppuhr:
-    def __init__(self):
-        self.image = safe_load("Stoppuhr.png", (120, 120))
+    def __init__(self): 
+        self.image = load_img("Stoppuhr.png", (120, 120)) #"Stoppuhr.png" Bild von Chatgpt generieren lassen
 
     def draw(self):
        
         sekunden = py.time.get_ticks() // 500 # definiert die sekunden mit 1000 ms einheit
         
         if sekunden % 2 == 0: # jede gerade sekunde wird stoppuhr kleiner 
-            bild = py.transform.scale(self.image, (100, 100))
+            bild = py.transform.scale(self.image, (100, 100)) # grösse von SToppuhr 
         else:
             # jede ungerade sekunde wird stoppuhr grösser
-            bild = py.transform.scale(self.image, (120, 120))
+            bild = py.transform.scale(self.image, (120, 120)) # Grösse von Stoppuhr
 
-        screen.blit(bild, (670, 10))
+        screen.blit(bild, (670, 10)) # beschreibt wo sich die Stoppuhr befindet
         
 
 
-
+# Stern
 class Stern:
     def __init__(self):
-        self.image = safe_load("star.png", (60, 60))
-        self.x = random.randint(0, 740)
-        self.y = random.randint(480, 580)
-        self.rect = py.Rect(self.x, self.y, 60, 60)
+        self.image = load_img("star.png", (60, 60)) # "Stern.png" Bild von Chatgpt generieren lassen
+        self.x = random.randint(0, 740) # mit random funktion : auf welcher breite der Stern random auftauchen kann
+        self.y = random.randint(480, 580) # auf welcher höhe der Stern random auftauchen kann
+        self.rect = py.Rect(self.x, self.y, 60, 60) #rect wichtig für colliderate Feature, denn colliderate hat nur mit rechteckigen Bildern funktioniert...
 
     def draw(self):
-        screen.blit(self.image, (self.x, self.y))
+        screen.blit(self.image, (self.x, self.y))  # wird auf Bildschirm angezeigt
         self.rect.topleft = (self.x, self.y)
 
-    # sodass die sterne nach berührung von player respawnen
+    # sodass die sterne nach Berührung von player respawnen
     # https://github.com/search?q=pygame.Rect.collidelist+language%3APython&type=Code&l=Python
     # untertützung von chatgpt: hatte schwierigkeiten herauszufinden wo denn genau colliderect im code reinsoll --> gameloop oder oben...
     def check_collision(self, player_rect):
-        if self.rect.colliderect(player_rect):
+        if self.rect.colliderect(player_rect): # wenn Player stern berührt....
           
-            self.x = random.randint(0, 740) # auf welcher breite der STern spawnen kann
+            self.x = random.randint(0, 740) # auf welcher breite der Stern spawnen kann
             self.y = random.randint(450, 580) # auf welche der höhe der stern spawnen kann
             
-            self.rect.topleft = (self.x, self.y)# damit colliderate funktioniert
+            self.rect.topleft = (self.x, self.y)# rect damit colliderate funktioniert
 
 # Objekte
-player = Player() # musste ich wie oben ändern --> anzahl elemente stimmten nicht überein --> Grund für Kollaps des Spieles
+player = Player() # mussten wir wie oben ändern --> anzahl elemente stimmten nicht überein --> Grund für vorherigen Kollaps des Spieles
 
-#Quelle von Bildern https://www.megavoxels.com/learn/how-to-make-a-pixel-art-watermelon/
+#Quelle von Hindernissen https://www.megavoxels.com/learn/how-to-make-a-pixel-art-watermelon/
 
-# musste wieder angepasst werden also zurück wie am Anfang, weil ich sonst nicht die grössse von jedem Hinderniss seperat ändern könnte
+# musste mehrmals angepasst werden, weil wir sonst nicht die grössse von jedem Hinderniss seperat ändern können
 hindernisse = [
     Hindernis("chocolate.png", 200, 200, 350, 457),
     Hindernis("cake.png", 170, 170, 640, 480),
     Hindernis("microwave.png", 200, 200, 10, 465),
-    ##Hindernis("sneaker.png", 310, 260, 440),
 ]
 
 
-stoppuhr = Stoppuhr()
+stoppuhr = Stoppuhr() # damit man die SToppuhr aufrufen und schlussendlich sehen kann , gleiches gilt für stern = Stern() etc..
 
-stern = Stern() #####in arbeit
+stern = Stern() 
 
 
 # score machen
 # https://www.makeuseof.com/pygame-game-scores-displaying-updating/
-score = 0
-font = py.font.SysFont(None, 40) #-> Man sieht den score nicht auf jedem Laptop, ich sehe ihn nicht, die anderen schon
+score = 0 # am Anfang des Spieles immer auf 0 gestellt
+font = py.font.SysFont(None, 40) # None: standart systemschriftart und 40 ist Buchstabengrösse-> Man sieht den score nicht auf jedem Laptop, ich sehe ihn nicht, die anderen schon
 
 
 # für Hintergrund
 # https://github.com/search?q=pygame.key.get_pressed+language%3APython&type=Code&l=Python
 
-startbild = safe_load("Start_Bildschirm.png", (800, 800)) #starthintergrund
-game_started = False
+
+# alles immer auf 800*800 grösse 
+startbild = load_img("Start_Bildschirm.png", (800, 800)) #starthintergrund
+game_started = False # wenn spiel noch nicht angefangen hat wird Startbild gezeigt
 
 # für endbildschirm
-endbild = safe_load("End_Bildschirm.png", (800, 800))
+endbild = load_img("End_Bildschirm.png", (800, 800)) # Während dem Spiel Hintergrund 
 game_over = False
 
-wonbild = safe_load("Won_Bildschirm.png", (800, 800)) # gewinnerhintergrund
+wonbild = load_img("Won_Bildschirm.png", (800, 800)) # gewinnerhintergrund
 
 
 
 running = True
-while running:
+while running: # solange running Variable wahr ist...
     clock.tick(FPS) # Zeit --> sekunden definiert
 
-    for event in py.event.get():
+    for event in py.event.get(): # wenn irgendwas passiert wie fenster schliessen, dann ist running= false und das spiel stoppt
         if event.type == py.QUIT:
             running = False
             
@@ -301,7 +291,7 @@ while running:
         
     
         
-        for h in hindernisse:
+        for h in hindernisse: # Liste gamcht -- > übersichtlicher
             h.draw()
         
         kopf.draw()
@@ -336,26 +326,26 @@ while running:
         stern.draw()
         
         # https://www.geeksforgeeks.org/python/adding-collisions-using-pygame-rect-colliderect-in-pygame/?utm_source=chatgpt.com
-        if stern.rect.colliderect(player.rect): # collision wird aufgerufen
-            score += 1
-            stern.x = random.randint(0, 740)
+        if stern.rect.colliderect(player.rect): # collidirect  wird aufgerufen
+            score += 1 # immer wenn stern und player colliden --> score wird um einen Punkt höher
+            stern.x = random.randint(0, 740) # wo sich der Stern auftauchen (random) kann
             stern.y = random.randint(460, 580)
-            stern.rect.topleft = (stern.x, stern.y)
+            stern.rect.topleft = (stern.x, stern.y) # linker eckpunkt vom STern  ist definiert höhe und wie breit worden
             
         #https://www.pygame.org/docs/ref/time.html#pygame.time.wait
         if score == 20: # damit das spiel nach 20 geholten sternen passt -> 10 zu kurz
-            screen.blit(wonbild, (0, 0))
-            py.display.update()
-            py.time.wait(5000)   # damit der hintergrund nicht bleibt
+            screen.blit(wonbild, (0, 0)) 
+            py.display.update() # updated bildschirm
+            py.time.wait(5000)   # Hintergrund bleibt für nur 5 Sekunden
             running = False   # spiel stoppt
             
             
-        player.move()
-        player.draw()
+        player.move() # ruft das bewegen des SPielers auf: sonst könnte er sich nicht von Ort bewegen
+        player.draw() # damit Spieler auf Bildschirm gezeigt wird
         
-        text = font.render("Score: " + str(score), True, (0, 0, 0))
-        screen.blit(text, (20, 20))
+        text = font.render("Score: " + str(score), True, (0, 0, 0)) # WIrd in Zahl umgewandlet mit str, und (0,0,0) sagt welche Farbe der Text sein soll (SChwarz)
+        screen.blit(text, (20, 20)) # wo der score angezeigt wird (linker echen oben)
         
         
-
     py.display.flip() # https://realpython.com/pygame-a-primer/#background-and-setup
+      # haben auch mit dieser Website gearbeitet: https://realpython.com/pygame-a-primer/
