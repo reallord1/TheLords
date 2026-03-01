@@ -6,6 +6,14 @@ import random # damit wir die random funktion benutzen können
 py.init() # damit wir sounds, grafiken etc benutzen können
 
 
+# Hintergrundmusik
+py.mixer.music.load("game_music.wav")
+py.mixer.music.set_volume(0.5)
+py.mixer.music.play(-1)  # -1 = Endlosschleife
+
+background_paused = False
+
+
 # Grund Ding
 win_size = (800, 800) # definiert grösse vom Bildschirm
 screen = py.display.set_mode(win_size)
@@ -281,6 +289,16 @@ while running: # solange running Variable wahr ist...
     for event in py.event.get(): # wenn irgendwas passiert wie fenster schliessen, dann ist running= false und das spiel stoppt
         if event.type == py.QUIT:
             running = False
+
+#Hintergrundmusik ein/aus
+        if event.type == py.KEYDOWN:
+            if event.key == py.K_m:  # Taste M für Musik ein aus
+                if bg_paused:
+                    py.mixer.music.unpause()
+                else:
+                    py.mixer.music.pause()
+                bg_paused = not bg_paused
+            
             
     # https://github.com/search?q=pygame.key.get_pressed+language%3APython&type=Code&l=Python 
     keys = py.key.get_pressed() # wenn die leertaste gedrückt wird is game started true --> normaler hintergrung initiiert --> mit boolean erzeugt
@@ -338,6 +356,8 @@ while running: # solange running Variable wahr ist...
         # wenn Player nicht hinter hindernis ist --> game over & End_Bildschirm wird aktiviert
         if not hinter_hindernis:
             game_over = True
+            py.mixer.music.pause() #wenn verloren keine Musik mehr
+
         
         stoppuhr.draw()
         stern.draw()
@@ -351,6 +371,7 @@ while running: # solange running Variable wahr ist...
             
         #https://www.pygame.org/docs/ref/time.html#pygame.time.wait
         if score == 20: # damit das spiel nach 20 geholten sternen passt -> 10 zu kurz
+            py.mixer.music.pause() # keine Musik wenn gewonnen
             screen.blit(wonbild, (0, 0)) 
             py.display.update() # updated bildschirm
             py.time.wait(5000)   # Hintergrund bleibt für nur 5 Sekunden
